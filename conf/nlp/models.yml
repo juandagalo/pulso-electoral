@@ -39,12 +39,6 @@ ner:
   description: "Named Entity Recognition for Spanish. Identifies persons, organizations, locations."
   entity_types: ["PER", "ORG", "LOC", "MISC"]
 
-ner_enhanced:
-  model: "PlanTL-GOB-ES/roberta-base-bne-capitel-ner"
-  provider: "huggingface"
-  description: "Enhanced NER model from Plan TL, trained on Spanish government text."
-  entity_types: ["PER", "ORG", "LOC", "OTH"]
-
 topics:
   model: "paraphrase-multilingual-MiniLM-L12-v2"
   provider: "sentence-transformers"
