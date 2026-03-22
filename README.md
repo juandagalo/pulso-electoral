@@ -120,6 +120,22 @@ app/ (optional Streamlit dashboard)
 
 **Total infrastructure cost: $0** -- all sources are free or open-access.
 
+### RSS Feed Availability as a Research Finding
+
+Of eleven originally targeted Colombian news outlets, only five currently provide public RSS feeds: El Tiempo (Colombia and Politics sections), La Silla Vacía, Razón Pública, and Pulzo. The remaining six have discontinued public RSS entirely with no working alternatives:
+
+| Outlet | Notes |
+|--------|-------|
+| El Espectador | Oldest newspaper in Colombia; independent editorial line |
+| Semana | Major news magazine; historically center-right |
+| Cambio Colombia | Investigative journalism |
+| Caracol Radio | Major radio network with online presence |
+| Blu Radio | Second-largest radio network |
+
+This is not merely a data collection inconvenience. When major outlets close machine-readable data channels, the pool of sources accessible to independent monitors concentrates around those that still offer open feeds. Reduced plurality in accessible sources limits monitoring coverage and raises the barrier for civil society organizations without commercial data subscriptions. This dynamic is directly relevant to civic space health and is documented here as a methodological finding.
+
+This situation reinforces the project's multi-source design: RSS alone cannot provide adequate coverage of the Colombian media landscape, which is why GDELT, ACLED, and Reddit are treated as co-equal primary sources rather than supplements.
+
 ## Notebook Guide
 
 | Stage | Notebooks | Purpose |

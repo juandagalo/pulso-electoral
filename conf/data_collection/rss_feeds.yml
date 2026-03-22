@@ -1,57 +1,49 @@
 # Colombian RSS Feeds for political news collection
 # Each feed is from a major Colombian news outlet
 
+# NOTE — RSS availability as of March 2026:
+# Five of the eleven originally targeted Colombian news outlets still provide
+# public RSS feeds. The following outlets have discontinued public RSS entirely
+# and no working alternatives were found:
+#
+#   - El Espectador   (Colombia's oldest newspaper, independent editorial line)
+#   - Semana          (major news magazine, historically center-right)
+#   - Cambio Colombia (investigative journalism)
+#   - Caracol Radio   (major radio network with online presence)
+#   - Blu Radio       (second-largest radio network)
+#
+# This concentration of accessible sources is itself a finding relevant to
+# the research: when major outlets close open data channels, independent
+# monitoring of the media landscape becomes structurally harder. The
+# project's multi-source approach (GDELT, ACLED, Reddit, RSS) exists
+# precisely because no single channel provides complete coverage.
+
 feeds:
   # El Tiempo — largest circulation newspaper in Colombia
-  - name: "El Tiempo - Titulares"
-    url: "https://www.eltiempo.com/rss/titulares.xml"
+  - name: "El Tiempo - Colombia"
+    url: "https://www.eltiempo.com/rss/colombia.xml"
     category: "news"
+    # STATUS: titulares.xml returned 404 as of 2026-03-22; replaced with colombia.xml
   - name: "El Tiempo - Politica"
     url: "https://www.eltiempo.com/rss/politica.xml"
     category: "politics"
 
-  # El Espectador — oldest newspaper in Colombia, independent editorial line
-  - name: "El Espectador"
-    url: "https://www.elespectador.com/rss/"
-    category: "news"
-  - name: "El Espectador - Politica"
-    url: "https://www.elespectador.com/politica/feed/"
-    category: "politics"
-
-  # Semana — major news magazine, historically center-right
-  - name: "Semana"
-    url: "https://www.semana.com/rss"
-    category: "news"
-
   # La Silla Vacia — independent investigative journalism, political analysis
   - name: "La Silla Vacia"
-    url: "https://www.lasillavacia.com/rss"
+    url: "https://www.lasillavacia.com/feed/"
     category: "analysis"
-
-  # Cambio Colombia — investigative journalism
-  - name: "Cambio Colombia"
-    url: "https://cambiocolombia.com/rss.xml"
-    category: "analysis"
+    # STATUS: /rss redirects to /feed/ which works; updated URL directly
 
   # Razon Publica — academic-oriented political analysis
   - name: "Razon Publica"
     url: "https://razonpublica.com/feed/"
     category: "analysis"
 
-  # Caracol Radio — major radio network with online presence
-  - name: "Caracol Radio"
-    url: "https://caracol.com.co/rss/"
-    category: "radio"
-
-  # Blu Radio — second largest radio network
-  - name: "Blu Radio"
-    url: "https://www.bluradio.com/rss"
-    category: "radio"
-
   # Pulzo — digital-native news aggregator
   - name: "Pulzo"
-    url: "https://www.pulzo.com/rss"
+    url: "https://www.pulzo.com/rss/nacion"
     category: "digital"
+    # STATUS: /rss returns 200 but 0 bytes; replaced with /rss/nacion
 
 # Collection settings
 settings:
