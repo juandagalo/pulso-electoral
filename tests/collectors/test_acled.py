@@ -86,9 +86,7 @@ def _make_response(status_code: int = 200, json_data: dict | None = None) -> Mag
     if json_data is not None:
         resp.json.return_value = json_data
     if status_code >= _HTTP_ERROR_THRESHOLD:
-        resp.raise_for_status.side_effect = requests.HTTPError(
-            response=resp
-        )
+        resp.raise_for_status.side_effect = requests.HTTPError(response=resp)
     else:
         resp.raise_for_status.return_value = None
     return resp
@@ -106,9 +104,7 @@ class TestGetAcledToken:
     @patch.dict("os.environ", {"ACLED_EMAIL": "user@test.com", "ACLED_PASSWORD": "s3cret"})
     def test_get_acled_token_success(self, mock_fetch: MagicMock) -> None:
         """Should return the access_token string on successful POST."""
-        mock_fetch.return_value = _make_response(
-            _HTTP_OK, {"access_token": "tok_abc123"}
-        )
+        mock_fetch.return_value = _make_response(_HTTP_OK, {"access_token": "tok_abc123"})
 
         token = _get_acled_token()
 
@@ -172,9 +168,7 @@ class TestFetchWithRetry:
 
     @patch("collectors.acled.time.sleep")
     @patch("collectors.acled.requests.get")
-    def test_fetch_with_retry_exhausted(
-        self, mock_get: MagicMock, mock_sleep: MagicMock
-    ) -> None:
+    def test_fetch_with_retry_exhausted(self, mock_get: MagicMock, mock_sleep: MagicMock) -> None:
         """Should raise HTTPError after all retry attempts are exhausted."""
         resp_500 = _make_response(500)
         mock_get.return_value = resp_500
@@ -237,9 +231,7 @@ class TestValidateAcledResponse:
 class TestParseEvent:
     """Tests for the _parse_event function."""
 
-    def test_parse_event(
-        self, sample_acled_event: dict, parsed_acled_event: dict
-    ) -> None:
+    def test_parse_event(self, sample_acled_event: dict, parsed_acled_event: dict) -> None:
         """Should map all 21 fields correctly, including inter1 as int."""
         result = _parse_event(sample_acled_event)
 

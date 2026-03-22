@@ -109,6 +109,6 @@ def detect_language(text: str) -> tuple[str, float]:
         results = detect_langs(text)
         if results:
             return results[0].lang, results[0].prob
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
     return "unknown", 0.0

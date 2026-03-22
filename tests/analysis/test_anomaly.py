@@ -67,14 +67,16 @@ class TestComputeVolumeSeries:
 
     def test_daily_counts(self) -> None:
         """Should compute daily post counts."""
-        df = pd.DataFrame({
-            "timestamp": [
-                "2026-03-20 10:00:00",
-                "2026-03-20 14:00:00",
-                "2026-03-20 18:00:00",
-                "2026-03-21 10:00:00",
-            ]
-        })
+        df = pd.DataFrame(
+            {
+                "timestamp": [
+                    "2026-03-20 10:00:00",
+                    "2026-03-20 14:00:00",
+                    "2026-03-20 18:00:00",
+                    "2026-03-21 10:00:00",
+                ]
+            }
+        )
 
         series = compute_volume_series(df, date_col="timestamp", freq="D")
 

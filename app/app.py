@@ -51,7 +51,7 @@ def load_db_posts() -> pd.DataFrame:
             df = conn.execute("SELECT * FROM posts").fetchdf()
             conn.close()
             return df
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
     return pd.DataFrame()
 
@@ -85,9 +85,7 @@ df = get_posts()
 # --- Pages ---
 if page == "Overview":
     st.title("Pulso Electoral Colombia 2026")
-    st.markdown(
-        "Social Listening & Digital Manipulation Research for **CIVICUS DDI**"
-    )
+    st.markdown("Social Listening & Digital Manipulation Research for **CIVICUS DDI**")
     st.divider()
 
     if df.empty:
@@ -137,33 +135,32 @@ elif page == "Platform Comparison":
 
     if df.empty:
         st.warning("No data available.")
-    else:
-        if "platform" in df.columns and "text" in df.columns:
-            # Text length by platform
-            df_analysis = df.copy()
-            df_analysis["text_length"] = df_analysis["text"].str.len()
+    elif "platform" in df.columns and "text" in df.columns:
+        # Text length by platform
+        df_analysis = df.copy()
+        df_analysis["text_length"] = df_analysis["text"].str.len()
 
-            st.subheader("Text Length Distribution by Platform")
-            fig = px.box(
-                df_analysis,
-                x="platform",
-                y="text_length",
-                title="Text Length by Platform",
-            )
-            st.plotly_chart(fig, use_container_width=True)
+        st.subheader("Text Length Distribution by Platform")
+        fig = px.box(
+            df_analysis,
+            x="platform",
+            y="text_length",
+            title="Text Length by Platform",
+        )
+        st.plotly_chart(fig, use_container_width=True)
 
-            # Post counts
-            st.subheader("Volume by Platform")
-            platform_summary = (
-                df_analysis.groupby("platform")
-                .agg(
-                    post_count=("id", "count"),
-                    avg_text_length=("text_length", "mean"),
-                    unique_authors=("author", "nunique"),
-                )
-                .reset_index()
+        # Post counts
+        st.subheader("Volume by Platform")
+        platform_summary = (
+            df_analysis.groupby("platform")
+            .agg(
+                post_count=("id", "count"),
+                avg_text_length=("text_length", "mean"),
+                unique_authors=("author", "nunique"),
             )
-            st.dataframe(platform_summary, use_container_width=True)
+            .reset_index()
+        )
+        st.dataframe(platform_summary, use_container_width=True)
 
 elif page == "Data Explorer":
     st.title("Data Explorer")
@@ -186,9 +183,7 @@ elif page == "Data Explorer":
         if selected_platform != "All":
             filtered = filtered[filtered["platform"] == selected_platform]
         if search_text:
-            filtered = filtered[
-                filtered["text"].str.contains(search_text, case=False, na=False)
-            ]
+            filtered = filtered[filtered["text"].str.contains(search_text, case=False, na=False)]
 
         st.markdown(f"**Showing {len(filtered)} of {len(df)} posts**")
         st.dataframe(

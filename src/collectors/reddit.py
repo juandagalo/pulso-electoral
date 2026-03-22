@@ -74,16 +74,18 @@ def collect_reddit_posts(
         submissions = sub.top(limit=limit, time_filter="week")
 
     for submission in submissions:
-        posts.append({
-            "title": submission.title,
-            "selftext": submission.selftext,
-            "url": f"https://reddit.com{submission.permalink}",
-            "published": submission.created_utc,
-            "author": str(submission.author) if submission.author else "deleted",
-            "score": submission.score,
-            "num_comments": submission.num_comments,
-            "flair": submission.link_flair_text,
-            "source": f"r/{subreddit}",
-        })
+        posts.append(
+            {
+                "title": submission.title,
+                "selftext": submission.selftext,
+                "url": f"https://reddit.com{submission.permalink}",
+                "published": submission.created_utc,
+                "author": str(submission.author) if submission.author else "deleted",
+                "score": submission.score,
+                "num_comments": submission.num_comments,
+                "flair": submission.link_flair_text,
+                "source": f"r/{subreddit}",
+            }
+        )
 
     return posts

@@ -39,13 +39,15 @@ def detect_anomalies(
     for idx in z_scores.index:
         z = z_scores[idx]
         if abs(z) >= threshold:
-            anomalies.append({
-                "timestamp": str(idx),
-                "value": float(series[idx]),
-                "z_score": float(z),
-                "rolling_mean": float(rolling_mean[idx]),
-                "rolling_std": float(rolling_std[idx]),
-            })
+            anomalies.append(
+                {
+                    "timestamp": str(idx),
+                    "value": float(series[idx]),
+                    "z_score": float(z),
+                    "rolling_mean": float(rolling_mean[idx]),
+                    "rolling_std": float(rolling_std[idx]),
+                }
+            )
 
     return anomalies
 

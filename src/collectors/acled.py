@@ -1,4 +1,5 @@
 """ACLED conflict and protest event data collection."""
+
 from __future__ import annotations
 
 import logging
@@ -63,7 +64,10 @@ def _fetch_with_retry(
                 wait = 1 * 2**attempt
             logger.warning(
                 "ACLED API %s (attempt %d/%d), retrying in %ds",
-                resp.status_code, attempt + 1, max_attempts, wait,
+                resp.status_code,
+                attempt + 1,
+                max_attempts,
+                wait,
             )
             time.sleep(wait)
 
@@ -185,10 +189,7 @@ def _filter_by_keywords(events: list[dict], keywords: list[str]) -> list[dict]:
         Filtered subset of events.
     """
     lowered = [kw.lower() for kw in keywords]
-    return [
-        ev for ev in events
-        if any(kw in ev.get("notes", "").lower() for kw in lowered)
-    ]
+    return [ev for ev in events if any(kw in ev.get("notes", "").lower() for kw in lowered)]
 
 
 def query_acled(  # noqa: PLR0913

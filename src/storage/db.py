@@ -120,9 +120,7 @@ def _migrate_acled_events(conn: duckdb.DuckDBPyConnection) -> None:
         Active DuckDB connection.
     """
     for col_name, col_type in _ACLED_MIGRATION_COLUMNS:
-        conn.execute(
-            f"ALTER TABLE acled_events ADD COLUMN IF NOT EXISTS {col_name} {col_type}"
-        )
+        conn.execute(f"ALTER TABLE acled_events ADD COLUMN IF NOT EXISTS {col_name} {col_type}")
 
 
 def insert_df(conn: duckdb.DuckDBPyConnection, table: str, df: pd.DataFrame) -> int:

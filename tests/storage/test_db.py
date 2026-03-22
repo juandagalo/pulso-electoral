@@ -65,16 +65,20 @@ class TestDuckDBHelpers:
         conn = get_connection(db_path)
         create_tables(conn)
 
-        df = pd.DataFrame([{
-            "id": "test001",
-            "source": "rss",
-            "platform": "rss",
-            "text": "Test post about Colombian elections",
-            "author": "test_author",
-            "timestamp": "2026-03-22 10:00:00",
-            "url": "https://example.com/1",
-            "collected_at": "2026-03-22 10:05:00",
-        }])
+        df = pd.DataFrame(
+            [
+                {
+                    "id": "test001",
+                    "source": "rss",
+                    "platform": "rss",
+                    "text": "Test post about Colombian elections",
+                    "author": "test_author",
+                    "timestamp": "2026-03-22 10:00:00",
+                    "url": "https://example.com/1",
+                    "collected_at": "2026-03-22 10:05:00",
+                }
+            ]
+        )
 
         rows = insert_df(conn, "posts", df)
         assert rows == 1

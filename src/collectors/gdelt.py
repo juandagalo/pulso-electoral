@@ -62,15 +62,17 @@ def query_gdelt(
 
     records = []
     for article in articles:
-        records.append({
-            "url": article.get("url", ""),
-            "title": article.get("title", ""),
-            "source_domain": article.get("domain", ""),
-            "published": article.get("seendate", ""),
-            "tone": article.get("tone", 0.0),
-            "language": article.get("language", ""),
-            "source": "gdelt",
-        })
+        records.append(
+            {
+                "url": article.get("url", ""),
+                "title": article.get("title", ""),
+                "source_domain": article.get("domain", ""),
+                "published": article.get("seendate", ""),
+                "tone": article.get("tone", 0.0),
+                "language": article.get("language", ""),
+                "source": "gdelt",
+            }
+        )
 
     time.sleep(2.0)  # Respect soft rate limits
     return pd.DataFrame(records)
