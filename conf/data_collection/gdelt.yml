@@ -1,0 +1,42 @@
+# GDELT Project configuration for Colombian news event tracking
+# GDELT: Global Database of Events, Language, and Tone
+# Coverage: 65+ languages, 15-minute update cycle
+
+filters:
+  # Country filter
+  country_code: "CO"
+  country_name: "Colombia"
+
+  # GDELT themes relevant to political monitoring
+  themes:
+    - "ELECTION"
+    - "PROTEST"
+    - "POLITICAL_TURMOIL"
+    - "GOVERNMENT"
+    - "CORRUPTION"
+    - "HUMAN_RIGHTS"
+    - "MEDIA_CENSORSHIP"
+    - "CIVIL_SOCIETY"
+
+  # Domain filters for Colombian sources
+  source_domains:
+    - "eltiempo.com"
+    - "elespectador.com"
+    - "semana.com"
+    - "lasillavacia.com"
+    - "caracol.com.co"
+    - "bluradio.com"
+
+  # Language filter
+  source_language: "Spanish"
+
+# Collection settings
+settings:
+  # gdeltdoc library for DOC API queries
+  max_records: 250
+  # Lookback period in days for each collection run
+  lookback_days: 7
+  # Delay between requests to respect soft rate limits
+  request_delay_seconds: 2.0
+  # Tone score range filter (optional, -100 to +100)
+  tone_range: null

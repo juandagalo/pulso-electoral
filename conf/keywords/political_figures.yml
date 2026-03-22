@@ -1,0 +1,94 @@
+# Political figures for Colombian 2026 election cycle
+# Names, handles, and aliases for tracking discourse by candidate/party
+
+figures:
+  # Current president
+  - name: "Gustavo Petro"
+    aliases:
+      - "Petro"
+      - "el presidente"
+    party: "Pacto Historico"
+    twitter: "@petaborek"
+
+  # Vice president
+  - name: "Francia Marquez"
+    aliases:
+      - "Francia"
+      - "la vice"
+    party: "Pacto Historico"
+    twitter: "@FranciaMarworked"
+
+  # Major opposition figures
+  - name: "Alvaro Uribe"
+    aliases:
+      - "Uribe"
+      - "el expresidente"
+      - "el innombrable"
+    party: "Centro Democratico"
+    twitter: "@AlvaroUribeVel"
+
+  - name: "Maria Fernanda Cabal"
+    aliases:
+      - "Cabal"
+      - "MaFe"
+    party: "Centro Democratico"
+    twitter: "@MariaFdaCabal"
+
+  # Potential 2026 presidential candidates
+  - name: "Federico Gutierrez"
+    aliases:
+      - "Fico"
+      - "Fico Gutierrez"
+    party: null
+    twitter: "@FicoGutierrez"
+
+  - name: "Sergio Fajardo"
+    aliases:
+      - "Fajardo"
+    party: "Partido Verde"
+    twitter: "@sergio_fajardo"
+
+  - name: "Juan Manuel Galan"
+    aliases:
+      - "Galan"
+    party: "Nuevo Liberalismo"
+    twitter: "@JuanManGalan"
+
+  - name: "Gustavo Bolivar"
+    aliases:
+      - "Bolivar"
+    party: "Pacto Historico"
+    twitter: "@GustavoBolivar"
+
+  - name: "German Vargas Lleras"
+    aliases:
+      - "Vargas Lleras"
+    party: "Cambio Radical"
+    twitter: "@German_Vargas"
+
+  - name: "Rodolfo Hernandez"
+    aliases:
+      - "Rodolfo"
+      - "el ingeniero"
+    party: null
+    twitter: "@ingaborek"
+
+# All names flattened for keyword matching
+all_names:
+  - "Petro"
+  - "Francia Marquez"
+  - "Uribe"
+  - "Cabal"
+  - "Fico"
+  - "Fajardo"
+  - "Galan"
+  - "Bolivar"
+  - "Vargas Lleras"
+  - "Rodolfo Hernandez"
+  - "Gustavo Petro"
+  - "Gustavo Bolivar"
+  - "Maria Fernanda Cabal"
+  - "German Vargas Lleras"
+  - "Juan Manuel Galan"
+  - "Sergio Fajardo"
+  - "Federico Gutierrez"

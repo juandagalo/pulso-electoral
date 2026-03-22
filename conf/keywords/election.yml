@@ -1,0 +1,55 @@
+# Election discourse keywords for Colombian 2026 election cycle
+# These keywords capture electoral process, voting, and campaign terminology
+
+keywords:
+  # Core electoral terminology
+  - elecciones
+  - candidato
+  - candidata
+  - voto
+  - votar
+  - votacion
+  - urnas
+  - tarjeton
+  - campana electoral
+  - Registraduria
+  - segunda vuelta
+  - primera vuelta
+  - consulta interpartidista
+  - debate presidencial
+  - encuesta
+  - intencion de voto
+  - abstencion
+  - voto en blanco
+
+  # Legislative bodies
+  - senado
+  - camara de representantes
+  - congreso
+  - congresista
+  - senador
+  - representante
+
+  # Electoral events
+  - elecciones legislativas
+  - elecciones presidenciales
+  - jornada electoral
+  - mesas de votacion
+  - jurados de votacion
+
+  # Parties and coalitions
+  - coalicion
+  - partido politico
+  - lista cerrada
+  - lista abierta
+  - formula vicepresidencial
+
+hashtags:
+  - "#Elecciones2026"
+  - "#ColombiaVota"
+  - "#EleccionesColombia"
+  - "#Congreso2026"
+  - "#DebatePresidencial"
+  - "#SegundaVuelta"
+  - "#VotoColombia"
+  - "#Elecciones2026CO"

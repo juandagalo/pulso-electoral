@@ -1,0 +1,60 @@
+# Colombian RSS Feeds for political news collection
+# Each feed is from a major Colombian news outlet
+
+feeds:
+  # El Tiempo — largest circulation newspaper in Colombia
+  - name: "El Tiempo - Titulares"
+    url: "https://www.eltiempo.com/rss/titulares.xml"
+    category: "news"
+  - name: "El Tiempo - Politica"
+    url: "https://www.eltiempo.com/rss/politica.xml"
+    category: "politics"
+
+  # El Espectador — oldest newspaper in Colombia, independent editorial line
+  - name: "El Espectador"
+    url: "https://www.elespectador.com/rss/"
+    category: "news"
+  - name: "El Espectador - Politica"
+    url: "https://www.elespectador.com/politica/feed/"
+    category: "politics"
+
+  # Semana — major news magazine, historically center-right
+  - name: "Semana"
+    url: "https://www.semana.com/rss"
+    category: "news"
+
+  # La Silla Vacia — independent investigative journalism, political analysis
+  - name: "La Silla Vacia"
+    url: "https://www.lasillavacia.com/rss"
+    category: "analysis"
+
+  # Cambio Colombia — investigative journalism
+  - name: "Cambio Colombia"
+    url: "https://cambiocolombia.com/rss.xml"
+    category: "analysis"
+
+  # Razon Publica — academic-oriented political analysis
+  - name: "Razon Publica"
+    url: "https://razonpublica.com/feed/"
+    category: "analysis"
+
+  # Caracol Radio — major radio network with online presence
+  - name: "Caracol Radio"
+    url: "https://caracol.com.co/rss/"
+    category: "radio"
+
+  # Blu Radio — second largest radio network
+  - name: "Blu Radio"
+    url: "https://www.bluradio.com/rss"
+    category: "radio"
+
+  # Pulzo — digital-native news aggregator
+  - name: "Pulzo"
+    url: "https://www.pulzo.com/rss"
+    category: "digital"
+
+# Collection settings
+settings:
+  request_delay_seconds: 1.0
+  max_articles_per_feed: 100
+  timeout_seconds: 30

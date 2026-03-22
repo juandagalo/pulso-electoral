@@ -1,0 +1,44 @@
+# Manipulation and disinformation keywords
+# These keywords identify digital manipulation, troll farms, and disinformation narratives
+
+keywords:
+  # Digital manipulation
+  - bots
+  - trolls
+  - bodega
+  - bodegas digitales
+  - manipulacion
+  - desinformacion
+  - fake news
+  - noticias falsas
+
+  # Colombian-specific troll terms
+  - petrotroles
+  - uritroles
+  - ficobots
+  - cuentas falsas
+
+  # Coordinated inauthentic behavior
+  - comportamiento inautentico
+  - propaganda
+  - guerra sucia
+  - mermelada digital
+
+  # Electoral fraud
+  - compra de votos
+  - fraude electoral
+  - trampa electoral
+  - trashumancia electoral
+
+  # Platform manipulation
+  - tendencia artificial
+  - hashtag pago
+  - cuentas automatizadas
+  - granjas de trolls
+
+hashtags:
+  - "#BodegasDigitales"
+  - "#Desinformacion"
+  - "#FakeNews"
+  - "#GuerraSucia"
+  - "#MermeladaDigital"

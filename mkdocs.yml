@@ -1,0 +1,30 @@
+site_name: Pulso Electoral Colombia 2026
+site_description: Social Listening & Digital Manipulation Research for CIVICUS DDI
+repo_url: https://github.com/pulso-electoral/pulso-electoral
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: red
+      accent: amber
+
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Data Ethics: data_ethics.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - tables

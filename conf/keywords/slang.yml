@@ -1,0 +1,63 @@
+# Colombian political slang and normalization mappings
+# These terms carry specific political meaning in Colombian discourse
+# Preserving original text while adding normalized versions for NLP accuracy
+
+# Normalization mapping: slang -> standard equivalent
+# The original text is ALWAYS preserved; normalization is applied to a copy for NLP
+normalizations:
+  gonorrea: "maldicion"       # Curse word, used as intensifier
+  marica: ""                  # Filler word in Colombian speech, remove for NLP
+  parcero: "amigo"            # Friend
+  parce: "amigo"              # Shortened form of parcero
+  chimba: "genial"            # Great / awesome
+  bacano: "genial"            # Great / awesome
+  mamerto: "izquierdista"     # Left-wing pejorative
+  uribista: "seguidor de Uribe"  # Uribe supporter
+  petrista: "seguidor de Petro"  # Petro supporter
+  tibio: "centrista"          # Centrist pejorative ("lukewarm")
+
+# Political slang with research relevance
+political_slang:
+  - term: "mermelada"
+    meaning: "Patronage / bribes"
+    relevance: "Corruption narratives"
+
+  - term: "bodega"
+    meaning: "Troll farm"
+    relevance: "Coordinated inauthentic behavior"
+
+  - term: "maquinaria"
+    meaning: "Clientelist machine"
+    relevance: "Electoral manipulation"
+
+  - term: "castrochavismo"
+    meaning: "Right-wing pejorative (Castro + Chavez)"
+    relevance: "Polarization signal"
+
+  - term: "mamerto"
+    meaning: "Leftist pejorative"
+    relevance: "Polarization signal"
+
+  - term: "paraco"
+    meaning: "Right-wing / paramilitary pejorative"
+    relevance: "Polarization signal"
+
+  - term: "tibio"
+    meaning: "Centrist pejorative"
+    relevance: "Polarization signal"
+
+  - term: "vaina"
+    meaning: "Thing (neutral, very common)"
+    relevance: "Noise filter — too common for signal detection"
+
+  - term: "dar papaya"
+    meaning: "Expose oneself to risk"
+    relevance: "Cultural idiom — contextual understanding"
+
+  - term: "tumbarse"
+    meaning: "To steal / to scam"
+    relevance: "Corruption and fraud narratives"
+
+  - term: "la rosca"
+    meaning: "Inner circle / cronyism"
+    relevance: "Corruption narratives"

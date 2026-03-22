@@ -1,0 +1,62 @@
+# ACLED configuration for Colombian conflict and protest event data
+# ACLED: Armed Conflict Location and Event Data
+# Free for research/NGO use (registration required, 24-48h approval)
+
+filters:
+  country: "Colombia"
+  iso: 100  # ISO numeric code (optional)
+
+  # Event types to collect
+  event_types:
+    - "Protests"
+    - "Riots"
+    - "Violence against civilians"
+    - "Strategic developments"
+
+  # Sub-event types of particular interest for civic space monitoring
+  sub_event_types:
+    - "Peaceful protest"
+    - "Protest with intervention"
+    - "Excessive force against protesters"
+    - "Mob violence"
+    - "Attack"
+    - "Abduction/forced disappearance"
+
+  # Additional fields of interest
+  additional_fields:
+    - "civilian_targeting"
+    - "disorder_type"
+    - "geo_precision"
+    - "tags"
+
+  # Actor types to track
+  actor_types:
+    - "Civilians"
+    - "Protesters"
+    - "Government"
+    - "Military"
+    - "Police"
+    - "Social Leaders"
+
+# Collection settings
+settings:
+  # ACLED updates weekly
+  lookback_days: 30
+  # API endpoint
+  base_url: "https://acleddata.com/api/acled/read"
+  token_url: "https://acleddata.com/oauth/token"
+  # Maximum records per request
+  limit: 5000
+  # Focus on events related to social leaders and civic organizations
+  notes_keywords:
+    - "lider social"
+    - "defensor de derechos"
+    - "sociedad civil"
+    - "periodista"
+
+# Fallback: If ACLED registration is pending, use GDELT protest events
+fallback:
+  use_gdelt_protest: true
+  gdelt_event_codes:
+    - "14"  # PROTEST
+    - "145" # PROTEST_DEMONSTRATION

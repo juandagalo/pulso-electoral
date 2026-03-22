@@ -1,0 +1,38 @@
+# Global configuration for Pulso Electoral Colombia 2026
+# Social Listening & Digital Manipulation Research for CIVICUS DDI
+
+project:
+  name: "Pulso Electoral Colombia 2026"
+  version: "0.1.0"
+  country: "Colombia"
+  country_code: "CO"
+  language: "es"
+  timezone: "America/Bogota"
+
+data:
+  raw_dir: "data/01_raw"
+  intermediate_dir: "data/02_intermediate"
+  primary_dir: "data/03_primary"
+  enriched_dir: "data/04_enriched"
+  analysis_dir: "data/05_analysis"
+  reporting_dir: "data/06_reporting"
+  db_path: "data/pulso_electoral.db"
+
+collection:
+  # Delay in seconds between API requests to be respectful
+  request_delay: 1.0
+  # Maximum articles/posts per source per collection run
+  max_items_per_source: 500
+  # Date range for initial collection (ISO format)
+  start_date: "2026-01-01"
+  end_date: null  # null means today
+
+analysis:
+  # Anomaly detection parameters
+  anomaly_window: 7  # Rolling window in days
+  anomaly_threshold: 2.5  # Z-score threshold for flagging anomalies
+  # Minimum posts for meaningful analysis
+  min_posts_for_analysis: 50
+  # Language filter — keep only Spanish posts
+  language_filter: "es"
+  language_confidence_threshold: 0.8

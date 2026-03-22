@@ -1,0 +1,52 @@
+# Civic space keywords
+# These keywords track civic space health, protests, and human rights in Colombia
+
+keywords:
+  # Civic society and organizations
+  - sociedad civil
+  - protesta social
+  - libertad de prensa
+  - libertad de expresion
+  - espacio civico
+
+  # Social leaders and human rights defenders
+  - lideres sociales
+  - lider social
+  - defensor de derechos humanos
+  - defensora de derechos humanos
+  - asesinato de lideres
+  - amenazas
+  - estigmatizacion
+
+  # State response to protests
+  - ESMAD
+  - criminalizacion de la protesta
+  - represion
+  - uso excesivo de fuerza
+
+  # Mobilization
+  - paro
+  - movilizacion social
+  - marcha
+  - plantones
+  - huelga
+
+  # Press freedom
+  - periodistas amenazados
+  - censura
+  - autocensura
+  - FLIP
+
+  # Organizations and frameworks
+  - CIVICUS
+  - MOE
+  - Karisma
+  - Colombia Check
+
+hashtags:
+  - "#LideresSociales"
+  - "#DerechosHumanos"
+  - "#LibertadDeExpresion"
+  - "#ProtestaSocial"
+  - "#EspacioCivico"
+  - "#PazTotal"

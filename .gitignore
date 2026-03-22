@@ -1,0 +1,140 @@
+# ignore everything in the following folders
+data/**
+
+# except their sub-folders
+!data/**/
+!data/README.md
+!data/sample/**
+
+# also keep all .gitkeep files
+!.gitkeep
+
+# DuckDB databases
+*.db
+*.duckdb
+
+# HuggingFace model cache
+models/**
+!models/.gitkeep
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+.venv
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg'
+venv
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# DotEnv configuration
+.env
+
+# Caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Hydra logs
+outputs
+
+### Claude Code
+.claude/
+
+### Agents
+.agents/
+
+### Editors
+
+# Jupyter NB Checkpoints
+.ipynb_checkpoints/
+
+######################################
+#### > VSCode Visual Studio Code #####
+######################################
+
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+!launch.json
+
+# Local History for Visual Studio Code
+.history/
+
+# IntelliJ
+.idea/
+*.iml
+out/
+.idea_modules/
+
+### macOS
+*.DS_Store
+.AppleDouble
+.LSOverride
+.Trashes
+
+# Vim
+*~
+.*.swo
+.*.swp
+
+# emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# Spyder
+.spyproject/

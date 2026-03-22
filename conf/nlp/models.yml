@@ -1,0 +1,59 @@
+# NLP model configuration for Pulso Electoral Colombia 2026
+# All models are loaded directly via their respective libraries in notebooks
+
+sentiment:
+  model: "pysentimiento/robertuito-sentiment-analysis"
+  task: "sentiment"
+  lang: "es"
+  provider: "pysentimiento"
+  description: "Sentiment analysis trained on ~500M Spanish tweets. Handles Colombian slang natively."
+  labels: ["POS", "NEG", "NEU"]
+
+emotion:
+  model: "pysentimiento/robertuito-emotion-analysis"
+  task: "emotion"
+  lang: "es"
+  provider: "pysentimiento"
+  description: "Emotion detection (joy, sadness, anger, surprise, disgust, fear) for Spanish text."
+  labels: ["joy", "sadness", "anger", "surprise", "disgust", "fear", "others"]
+
+hate_speech:
+  model: "pysentimiento/robertuito-hate-speech"
+  task: "hate_speech"
+  lang: "es"
+  provider: "pysentimiento"
+  description: "Hate speech detection for Spanish text, including targeted/aggressive classification."
+  labels: ["hateful", "targeted", "aggressive"]
+
+irony:
+  model: "pysentimiento/robertuito-irony"
+  task: "irony"
+  lang: "es"
+  provider: "pysentimiento"
+  description: "Irony detection — important for Colombian discourse where sarcasm is prevalent."
+  labels: ["ironic", "not_ironic"]
+
+ner:
+  model: "es_core_news_lg"
+  provider: "spacy"
+  description: "Named Entity Recognition for Spanish. Identifies persons, organizations, locations."
+  entity_types: ["PER", "ORG", "LOC", "MISC"]
+
+ner_enhanced:
+  model: "PlanTL-GOB-ES/roberta-base-bne-capitel-ner"
+  provider: "huggingface"
+  description: "Enhanced NER model from Plan TL, trained on Spanish government text."
+  entity_types: ["PER", "ORG", "LOC", "OTH"]
+
+topics:
+  model: "paraphrase-multilingual-MiniLM-L12-v2"
+  provider: "sentence-transformers"
+  description: "Multilingual sentence embeddings for topic modeling (sentence-transformers + sklearn)."
+  # Clustering parameters (used by sklearn in the analysis notebook)
+  min_cluster_size: 10
+
+language_detection:
+  provider: "langdetect"
+  description: "Language detection to filter non-Spanish content."
+  target_language: "es"
+  confidence_threshold: 0.8

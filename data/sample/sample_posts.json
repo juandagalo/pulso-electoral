@@ -1,0 +1,227 @@
+[
+  {
+    "id": "sample_001",
+    "text": "Petro firma decreto de emergencia economica: el gobierno busca reactivar la produccion nacional con subsidios directos a las pymes. La oposicion califica la medida de populista.",
+    "source": "El Tiempo",
+    "platform": "rss",
+    "author": "Redaccion Politica",
+    "timestamp": "2026-03-18T08:00:00",
+    "url": "https://eltiempo.com/politica/petro-decreto-emergencia"
+  },
+  {
+    "id": "sample_002",
+    "text": "Fico Gutierrez anuncia su candidatura presidencial para 2026: 'Colombia necesita un cambio responsable, no mas improvisacion'. Centro Democratico aun no define si lo apoyara.",
+    "source": "El Espectador",
+    "platform": "rss",
+    "author": "Maria Gonzalez",
+    "timestamp": "2026-03-18T10:30:00",
+    "url": "https://elespectador.com/politica/fico-candidatura-2026"
+  },
+  {
+    "id": "sample_003",
+    "text": "Parcero, ustedes creen que las elecciones van a cambiar algo? Llevamos decadas con la misma rosca de siempre, no importa si es de izquierda o derecha. Todos son iguales.",
+    "source": "r/Colombia",
+    "platform": "reddit",
+    "author": "colombiano_esceptico",
+    "timestamp": "2026-03-18T14:00:00",
+    "url": "https://reddit.com/r/Colombia/comments/abc001"
+  },
+  {
+    "id": "sample_004",
+    "text": "Las bodegas digitales del uribismo estan trabajando horas extras. Miren como inundan Twitter con el mismo mensaje contra la reforma agraria. Comportamiento inautentico coordinado.",
+    "source": "r/Colombia",
+    "platform": "reddit",
+    "author": "detective_digital",
+    "timestamp": "2026-03-18T16:00:00",
+    "url": "https://reddit.com/r/Colombia/comments/abc002"
+  },
+  {
+    "id": "sample_005",
+    "text": "Asesinan a lider social en Tumaco, Narino. Es el tercer asesinato de defensores de derechos humanos esta semana. Las organizaciones de sociedad civil exigen accion inmediata del gobierno.",
+    "source": "El Tiempo",
+    "platform": "rss",
+    "author": "Redaccion Judicial",
+    "timestamp": "2026-03-19T07:00:00",
+    "url": "https://eltiempo.com/justicia/asesinato-lider-tumaco"
+  },
+  {
+    "id": "sample_006",
+    "text": "La paz total de Petro es una chimba de idea. Por fin un presidente que le apuesta a la negociacion y no a la guerra. Los que critican nunca han vivido el conflicto.",
+    "source": "r/Colombia",
+    "platform": "reddit",
+    "author": "petrista_convencido",
+    "timestamp": "2026-03-19T09:00:00",
+    "url": "https://reddit.com/r/Colombia/comments/abc003"
+  },
+  {
+    "id": "sample_007",
+    "text": "Gonorrea, este gobierno mamerto nos tiene jodidos. La gasolina sube, el dolar sube, todo sube menos el sueldo. Y Petro hablandole al pueblo como si fueramos brutos.",
+    "source": "r/Colombia",
+    "platform": "reddit",
+    "author": "indignado_2026",
+    "timestamp": "2026-03-19T11:00:00",
+    "url": "https://reddit.com/r/Colombia/comments/abc004"
+  },
+  {
+    "id": "sample_008",
+    "text": "Encuesta Invamer: Fico Gutierrez 28%, Sergio Fajardo 18%, Francia Marquez 12%, Gustavo Bolivar 10%, Maria Fernanda Cabal 8%. Indecisos: 24%. Abstencion proyectada: 48%.",
+    "source": "Semana",
+    "platform": "rss",
+    "author": "Equipo de Datos",
+    "timestamp": "2026-03-19T13:00:00",
+    "url": "https://semana.com/nacion/encuesta-presidencial-marzo"
+  },
+  {
+    "id": "sample_009",
+    "text": "La Registraduria confirma que las elecciones legislativas de marzo 2026 tendran 38 millones de colombianos habilitados para votar. Se instalan 112.000 mesas de votacion en todo el pais.",
+    "source": "Caracol Radio",
+    "platform": "rss",
+    "author": "Redaccion",
+    "timestamp": "2026-03-19T15:00:00",
+    "url": "https://caracol.com.co/elecciones/registraduria-censo-electoral"
+  },
+  {
+    "id": "sample_010",
+    "text": "Uribe desde su finca sigue manejando todo. Los candidatos de Centro Democratico le piden la bendicion antes de decir cualquier cosa. La maquinaria uribista no descansa.",
+    "source": "r/Colombia",
+    "platform": "reddit",
+    "author": "analista_politico_reddit",
+    "timestamp": "2026-03-19T17:00:00",
+    "url": "https://reddit.com/r/Colombia/comments/abc005"
+  },
+  {
+    "id": "sample_011",
+    "text": "Colombia Check verifico: es FALSO que el gobierno Petro haya comprado aviones de lujo. La desinformacion circula en cadenas de WhatsApp y ha sido compartida mas de 50.000 veces.",
+    "source": "Colombia Check",
+    "platform": "rss",
+    "author": "Colombia Check",
+    "timestamp": "2026-03-20T08:00:00",
+    "url": "https://colombiacheck.com/verificacion/aviones-lujo"
+  },
+  {
+    "id": "sample_012",
+    "text": "Maria Fernanda Cabal: 'Petro quiere convertir a Colombia en Venezuela. El castrochavismo no pasara.' La senadora Centro Democratico radicaliza su discurso a tres meses de elecciones.",
+    "source": "La Silla Vacia",
+    "platform": "rss",
+    "author": "Juan Esteban Lewin",
+    "timestamp": "2026-03-20T09:30:00",
+    "url": "https://lasillavacia.com/historias/cabal-radicaliza-discurso"
+  },
+  {
+    "id": "sample_013",
+    "text": "Ojo con la compra de votos en la costa. Ya empezaron a repartir mercados y plata. La maquinaria politica de siempre, ahora con logos nuevos. La MOE deberia investigar.",
+    "source": "r/Colombia",
+    "platform": "reddit",
+    "author": "costeno_preocupado",
+    "timestamp": "2026-03-20T11:00:00",
+    "url": "https://reddit.com/r/Colombia/comments/abc006"
+  },
+  {
+    "id": "sample_014",
+    "text": "Sergio Fajardo propone pacto nacional por la educacion. Su discurso moderado no genera ni amor ni odio. Los tibios no ganan elecciones en Colombia, dicen analistas.",
+    "source": "Razon Publica",
+    "platform": "rss",
+    "author": "Carlos Mesa",
+    "timestamp": "2026-03-20T13:00:00",
+    "url": "https://razonpublica.com/fajardo-pacto-educacion"
+  },
+  {
+    "id": "sample_015",
+    "text": "URGENTE: Detectan red de bots en Twitter promoviendo hashtag #FicoPresidente. Mas de 3.000 cuentas creadas en las ultimas 48 horas con el mismo patron de publicacion.",
+    "source": "La Silla Vacia",
+    "platform": "rss",
+    "author": "La Silla Vacia",
+    "timestamp": "2026-03-20T15:00:00",
+    "url": "https://lasillavacia.com/historias/red-bots-fico"
+  },
+  {
+    "id": "sample_016",
+    "text": "Francia Marquez denuncia estigmatizacion: 'Me dicen que no estoy preparada solo por ser mujer negra del Cauca. El racismo y el machismo siguen vivos en la politica colombiana.'",
+    "source": "El Espectador",
+    "platform": "rss",
+    "author": "Laura Betancur",
+    "timestamp": "2026-03-20T17:00:00",
+    "url": "https://elespectador.com/politica/francia-marquez-estigmatizacion"
+  },
+  {
+    "id": "sample_017",
+    "text": "El ESMAD reprime manifestacion pacifica de estudiantes en Bogota. Gases lacrimogenos y detenciones arbitrarias. La criminalizacion de la protesta sigue siendo la norma.",
+    "source": "Blu Radio",
+    "platform": "rss",
+    "author": "Blu Radio",
+    "timestamp": "2026-03-21T08:00:00",
+    "url": "https://www.bluradio.com/nacion/esmad-protesta-bogota"
+  },
+  {
+    "id": "sample_018",
+    "text": "A mi me da igual quien gane. Todos prometen lo mismo y despues se olvidan del pueblo. Lo unico que cambia es el color de la bandera del partido. Colombia no tiene arreglo, marica.",
+    "source": "r/Colombia",
+    "platform": "reddit",
+    "author": "desencantado_total",
+    "timestamp": "2026-03-21T10:00:00",
+    "url": "https://reddit.com/r/Colombia/comments/abc007"
+  },
+  {
+    "id": "sample_019",
+    "text": "Gustavo Bolivar confirma que sera candidato presidencial por el Pacto Historico. El senador promete continuar las reformas de Petro y profundizar la paz total.",
+    "source": "El Tiempo",
+    "platform": "rss",
+    "author": "Redaccion Politica",
+    "timestamp": "2026-03-21T12:00:00",
+    "url": "https://eltiempo.com/politica/bolivar-candidato-presidencial"
+  },
+  {
+    "id": "sample_020",
+    "text": "German Vargas Lleras mueve su maquinaria en Cambio Radical. El partido ya tiene listas completas en 28 departamentos. La mermelada politica funciona mejor que cualquier ideologia.",
+    "source": "La Silla Vacia",
+    "platform": "rss",
+    "author": "Juanita Leon",
+    "timestamp": "2026-03-21T14:00:00",
+    "url": "https://lasillavacia.com/historias/vargas-lleras-maquinaria"
+  },
+  {
+    "id": "sample_021",
+    "text": "ACLED reporta 156 eventos de violencia politica en Colombia en el primer trimestre de 2026. El departamento del Cauca concentra el 23% de los incidentes. Preocupacion por la escalada.",
+    "source": "gdelt",
+    "platform": "gdelt",
+    "author": "ACLED",
+    "timestamp": "2026-03-21T16:00:00",
+    "url": "https://acleddata.com/colombia"
+  },
+  {
+    "id": "sample_022",
+    "text": "Los petrotroles inundaron Reddit. Todo post que critique al gobierno tiene 50 downvotes en minutos. La bodega petrista es real y organizada. Hasta tienen turnos.",
+    "source": "r/Colombia",
+    "platform": "reddit",
+    "author": "opositor_digital",
+    "timestamp": "2026-03-21T18:00:00",
+    "url": "https://reddit.com/r/Colombia/comments/abc008"
+  },
+  {
+    "id": "sample_023",
+    "text": "Debate presidencial en CityTV: Fajardo propone dialogo, Cabal habla de seguridad, Bolivar defiende reformas, Fico promete empleo. Ninguno explica como financiar sus propuestas.",
+    "source": "Caracol Radio",
+    "platform": "rss",
+    "author": "Darcy Quinn",
+    "timestamp": "2026-03-22T08:00:00",
+    "url": "https://caracol.com.co/debate-presidencial-citytv"
+  },
+  {
+    "id": "sample_024",
+    "text": "La Defensoria del Pueblo alerta sobre amenazas contra candidatos locales en Norte de Santander, Arauca y Cauca. Pide proteccion urgente para 23 candidatos al Congreso.",
+    "source": "Caracol Radio",
+    "platform": "rss",
+    "author": "Noticias Caracol",
+    "timestamp": "2026-03-22T10:00:00",
+    "url": "https://caracol.com.co/nacion/defensoria-amenazas-candidatos"
+  },
+  {
+    "id": "sample_025",
+    "text": "Que chimba que la juventud colombiana se este metiendo en politica. En mi epoca nadie hablaba de elecciones. Ahora los pelados debaten en TikTok y Reddit. Eso es bacano, parceros.",
+    "source": "r/Colombia",
+    "platform": "reddit",
+    "author": "abuelo_digital",
+    "timestamp": "2026-03-22T12:00:00",
+    "url": "https://reddit.com/r/Colombia/comments/abc009"
+  }
+]
