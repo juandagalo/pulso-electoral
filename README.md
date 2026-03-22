@@ -1,10 +1,10 @@
 # Pulso Electoral Colombia 2026
 
-**Social Listening & Digital Manipulation Research for CIVICUS DDI**
+**Social Listening & NLP for Electoral Discourse Analysis -- A Technical Demo**
 
-Pulso Electoral is a research project that monitors digital manipulation and civic space health during Colombia's 2026 election cycle. It collects public discourse from Colombian news outlets, Reddit, and global event databases; processes it through multilingual NLP trained on Latin American Spanish; detects narrative anomalies; and presents findings as reproducible analytical notebooks.
+Pulso Electoral is a working proof of concept that demonstrates social listening and multilingual NLP capabilities for monitoring electoral discourse and digital manipulation in Colombia's 2026 election cycle. It collects public discourse from Colombian news outlets, Reddit, and global event databases; processes it through NLP models trained on Latin American Spanish; detects narrative patterns; and presents findings as reproducible analytical notebooks.
 
-This project serves as the primary technical work sample for a consulting application to the [CIVICUS Digital Democracy Initiative](https://civicus.org).
+Built as a capability demonstration for the [CIVICUS Digital Democracy Initiative](https://civicus.org) consulting application, this demo shows what a full engagement could look like -- with real data, real models, and a real pipeline running end to end.
 
 ---
 
@@ -98,67 +98,55 @@ make run_app
 
 ### Why DuckDB?
 
-- **Zero infrastructure**: Embedded analytical database — no server setup, just a file
+- **Zero infrastructure**: Embedded analytical database -- no server setup, just a file
 - **SQL on DataFrames**: Query collected data with standard SQL directly from pandas
 - **Parquet native**: Reads/writes Parquet files, keeping data portable across tools
 - **Scalable path**: Migrates cleanly to MotherDuck (cloud), PostgreSQL, or BigQuery for production
 
-## 🚀 Scalability & Growth Path
+## Demonstrated Capabilities
 
-### NLP Models
+This demo validates a set of core capabilities that translate directly into a full-scale engagement.
 
-Each model is swappable via a single line in `conf/nlp/models.yml` — no code changes required.
+### What the demo proves
 
-| Component | Current | Upgrade Path |
-|-----------|---------|--------------|
-| Sentiment / Emotion / Hate / Irony | pysentimiento (robertuito, 4 models) | Any HuggingFace Spanish classifier — pysentimiento wraps the Transformers API |
-| NER | spaCy `es_core_news_lg` | Transformer-based NER (e.g., `PlanTL-GOB-ES/roberta-base-bne-capitel-ner`) — change model name in config, `spacy-transformers` handles the rest |
-| Topic embeddings | `paraphrase-multilingual-MiniLM-L12-v2` | Any sentence-transformers model — model name is a config value, embeddings are model-agnostic |
-| Topic clustering | sklearn KMeans | HDBSCAN (density-based, no fixed k) or BERTopic — clustering runs on the same embeddings array |
+| Capability | How it works in this demo |
+|------------|--------------------------|
+| **Multi-source data collection** | 4 live sources (RSS, Reddit, GDELT, ACLED) collected through a uniform pipeline -- each source is one fetch function and one normalize function |
+| **Multilingual NLP** | pysentimiento runs 4 models (sentiment, emotion, hate speech, irony) trained specifically on Latin American Spanish, not translated English |
+| **Named entity recognition** | spaCy `es_core_news_lg` extracts politicians, organizations, and locations from Spanish-language text |
+| **Topic and narrative detection** | sentence-transformers + sklearn KMeans cluster emerging narratives without predefined categories |
+| **Reproducible research workflow** | Numbered notebooks tell a complete analytical story from raw data to findings, runnable with a single `make` command |
+| **Zero-cost infrastructure** | All data sources are free, storage is embedded (DuckDB + Parquet), and the full pipeline runs on a laptop |
 
-### Data Sources
+### How these scale in a real engagement
 
-Current: 3 source families (RSS feeds, Reddit, GDELT+ACLED). Each collector follows the same pattern:
+The architecture is designed so that scaling up means adding to the pipeline, not rebuilding it. Each additional data source requires one fetch function and one normalize function -- the downstream analysis does not change.
 
-```
-fetch raw data  →  normalize to common schema  →  write to data/01_raw/
-```
+**Additional data sources** that slot into the existing pipeline:
 
-Adding a new source means implementing one fetch function and one normalize function — no changes to the downstream pipeline.
+| Source | Library | What it adds |
+|--------|---------|-------------|
+| Telegram channels | `telethon` | Encrypted messaging discourse (scoped to ~10 public channels) |
+| Bluesky | `atproto` | Emerging social platform activity |
 
-| Potential source | Library | Status |
-|-----------------|---------|--------|
-| Telegram channels | `telethon` | Scoped (10 channels identified) |
-| Bluesky | `atproto` | Scoped |
-| Twitter/X | `tweepy` | Pending API access |
+**Additional analytical layers** that build on the current NLP foundation:
 
-### Storage
+- **Network analysis** -- coordination detection using NetworkX and Louvain community detection
+- **Visibility asymmetry** -- cross-platform reach comparison to identify algorithmic amplification
+- **Early warning indicators** -- anomaly detection on narrative velocity, correlated with ACLED physical events
+- **Algorithmic bias and polarization** -- narrative tracking over time with cross-source sentiment comparison
 
-| Phase | Solution | Trigger |
-|-------|----------|---------|
-| Demo (now) | **DuckDB** — embedded, zero infrastructure | < 10M rows, single analyst |
-| Pilot | **MotherDuck** — cloud DuckDB, same SQL | CIVICUS team needs shared access |
-| Production | **PostgreSQL** or **BigQuery** | Concurrent dashboards, multi-team |
+DuckDB scales to MotherDuck (shared cloud access) or migrates to PostgreSQL/BigQuery with a connection-string change, not a rewrite. The production database choice would be finalized based on actual infrastructure and team size.
 
-Parquet files in `data/01_raw` through `data/06_reporting` are the interchange format. Every option above reads Parquet natively — migration is a connection-string change, not a rewrite. Production DB choice is deferred to the CIVICUS Inception Phase (Deliverable 1).
+## Design Principles
 
-### Analysis Capabilities
+The engineering choices behind this demo prioritize reproducibility and extensibility -- making it straightforward for another team to pick up, run, and build on.
 
-| Layer | Current | Growth Path |
-|-------|---------|-------------|
-| Sentiment | Sentence-level (positive/negative/neutral) | Time-series sentiment velocity, cross-source comparison |
-| NER | Persons, orgs, locations | Entity co-occurrence networks, entity-level sentiment |
-| Topics | KMeans clusters on embeddings | Narrative tracking over time, cross-platform topic alignment |
-| Network | — | Coordination detection (DBSCAN), community detection (Louvain/NetworkX) |
-| Anomaly | — | Spike detection, narrative velocity alerts |
-| Reporting | Manual notebook outputs | Automated Signal-Insight-Action-Outcome report generation |
-
-### Infrastructure
-
-- **CI** — GitHub Actions already runs on every push; add scheduled collection jobs with no infra changes
-- **Docker** — `Dockerfile` is ready; deploy to any cloud run service (Cloud Run, ECS, Azure Container Apps)
-- **Scheduling** — swap notebook `make` commands for cron, GitHub Actions schedules, or a cloud scheduler
-- **GPU** — `sentence-transformers` and `pysentimiento` both support CUDA; set `device="cuda"` when volume justifies the cost
+- **Config-driven** -- keywords, sources, thresholds, and model names live in `conf/*.yml`. Monitoring scope can be adjusted without touching code.
+- **Notebook workflow** -- analysis lives in numbered notebooks (`1-data` through `4-output`) that tell a research story, not black-box scripts. Each notebook is simultaneously documentation and executable code.
+- **Makefile automation** -- `make collect_all`, `make analyze`, `make export` are the full operational interface. No Python knowledge required to run a collection cycle.
+- **Portable data** -- Parquet files in `data/01_raw` through `data/06_reporting` are vendor-neutral and readable by any modern data tool.
+- **Documentation** -- MkDocs site (`make docs`), architecture docs, and a data ethics framework are included.
 
 ## Development
 
@@ -171,7 +159,7 @@ make docs           # Serve MkDocs documentation locally
 
 ## Team
 
-This project was developed for the CIVICUS Digital Democracy Initiative application, combining research expertise in Colombian political culture with data engineering capabilities.
+This project was built for the CIVICUS Digital Democracy Initiative application, combining research expertise in Colombian political culture with data engineering and NLP capabilities.
 
 ## License
 
