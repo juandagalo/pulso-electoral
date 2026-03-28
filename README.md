@@ -4,7 +4,7 @@
 
 Colombia's 2026 election cycle is unfolding under conditions of rising polarization, coordinated digital manipulation, and threats to civic space. Monitoring how these dynamics play out in online discourse requires social listening infrastructure that works with Latin American Spanish, handles the nuances of Colombian political culture, and produces research-grade outputs -- not marketing dashboards.
 
-This project demonstrates that capability. Built in approximately one week, it collects live data from three sources, processes it through NLP models trained on Latin American Spanish, and delivers reproducible analytical notebooks that follow a Signal-Insight-Action-Outcome framework designed for research teams.
+This project demonstrates that capability. Built in approximately one week, it collects live data from three sources (RSS, GDELT, ACLED), processes it through NLP models trained on Latin American Spanish, and delivers reproducible analytical notebooks that follow a Signal-Insight-Action-Outcome framework designed for research teams. The project includes **32,488 collected records**, **57 passing tests**, and an interactive Streamlit dashboard for exploration.
 
 ---
 
@@ -14,15 +14,20 @@ Everything here is real and running -- not mockups, not planned features.
 
 | What is working | What it produces |
 |-----------------|------------------|
-| 3-source data pipeline (RSS, GDELT, ACLED) | Normalized, deduplicated datasets across news and event databases |
+| 3-source data pipeline (RSS, GDELT, ACLED) | 32,488 normalized, deduplicated records across news and event databases |
 | Sentiment analysis with `pysentimiento` | Polarity and emotion scores calibrated to Latin American Spanish (trained on ~500M tweets) |
 | Named entity recognition with `spaCy` | Politicians, organizations, and locations extracted from Spanish text |
 | Topic modeling with sentence-transformers | Emerging narrative clusters detected without predefined categories |
-| 10 numbered notebooks across 5 stages | Reproducible analytical story from raw data to findings |
+| Emotion detection and hate speech analysis | Fine-grained emotional signals and toxicity scoring via pysentimiento |
+| Colombian slang normalization | Culturally-aware preprocessing for terms like *bodega*, *mermelada*, *castrochavismo* |
+| Language detection and filtering | Automatic identification and filtering of non-Spanish content |
+| 9 numbered notebooks across 5 stages | Reproducible analytical story from raw data to findings |
+| Interactive Streamlit dashboard (6 pages) | Overview, sentiment thermometer, anomaly detection, geographic map, platform comparison, data explorer -- with real-time data freshness indicator |
 | Config-driven keyword monitoring | 5 YAML configs: election, manipulation, civic space, political figures, Colombian slang |
 | Tool comparison analysis | Brandwatch vs. open-source evaluation with cost, language, and sustainability criteria |
 | Signal-Insight-Action-Outcome templates | Structured handoff format between data analyst and domain expert |
 | Data ethics and compliance documentation | Data minimization, no-model-training policy, source-specific compliance |
+| 57 tests with full CI/CD | pytest + ruff + mypy + commitizen, all passing in GitHub Actions |
 | Zero-cost infrastructure | All sources free, storage embedded (DuckDB), runs on a laptop |
 
 ---
@@ -39,6 +44,7 @@ Each capability demonstrated here enables a specific part of the DDI consulting 
 | Colombian political slang normalization | Culturally-aware preprocessing that captures terms like *bodega* (troll farm), *mermelada* (patronage), and *castrochavismo* (polarization signal) -- missed by generic Spanish models |
 | ACLED + GDELT integration | Cross-referencing online sentiment with real-world protest, violence, and political events for early warning detection |
 | Reproducible notebook workflow | Every analytical claim is auditable, re-runnable, and documented -- critical for research credibility and funder reporting |
+| Interactive dashboard with anomaly detection | Visual exploration of sentiment, volume spikes, geographic patterns, and cross-platform comparison -- functional prototype of the monitoring interface a full engagement would deliver |
 | DuckDB embedded storage | Zero-infrastructure deployment; migrates to MotherDuck (cloud), PostgreSQL, or BigQuery when team size and access needs require it |
 | Open-source stack at $0/year | Sustainable after contract ends -- CIVICUS keeps everything, no license expiration |
 
@@ -62,16 +68,16 @@ This demo is a proof of concept, not a finished product. Here is what changes wi
 
 | Dimension | This demo | A funded engagement adds |
 |-----------|-----------|--------------------------|
-| **Data sources** | 3 (RSS, GDELT, ACLED) | Reddit, Telegram, Bluesky, X/Twitter, Facebook (via CrowdTangle or equivalent) |
+| **Data sources** | 3 (RSS, GDELT, ACLED) — 32,488 records | Telegram, Bluesky, X/Twitter, Facebook (via CrowdTangle or equivalent), Reddit (deferred due to API delays) |
 | **Collection mode** | Manual notebook runs | Automated scheduled collection (cron/Airflow) |
-| **Analysis depth** | Sentiment, NER, topic clustering | Network analysis, coordination detection, visibility asymmetry, bot scoring |
+| **Analysis depth** | Sentiment, NER, topic clustering, emotion detection, hate speech analysis, anomaly detection | Network analysis, coordination detection, visibility asymmetry, bot scoring |
 | **Geographic scope** | Colombia only | Multi-country (methodology portable via config changes and model swaps) |
 | **NLP languages** | Latin American Spanish | Additional Global South languages via AfriSenti, XLM-RoBERTa, NLLB |
 | **Storage** | Local DuckDB file | Cloud-accessible database (MotherDuck, PostgreSQL, or BigQuery -- decided in Inception Phase) |
 | **Team** | Solo data engineer | Data engineer + domain expert + research coordinator |
 | **Outputs** | Notebooks + exported CSVs | Research Data Packages (dataset + insight brief + visualizations + methodology note) |
 | **Training** | Documentation only | Live capacity building sessions, recorded training, advisory support |
-| **Dashboard** | Prototype Streamlit app | Production monitoring dashboard with role-based access |
+| **Dashboard** | Interactive Streamlit app with 6 analytical pages, anomaly detection, geographic mapping, and data freshness monitoring | Production monitoring dashboard with role-based access and alerting |
 
 ---
 
@@ -105,21 +111,21 @@ src/ (thin utility functions)
 data/ (numbered layers)
   |   01_raw/ --> 02_intermediate/ --> 03_primary/ --> 04_enriched/ --> 05_analysis/ --> 06_reporting/
   v
-app/ (optional Streamlit dashboard)
-      Lightweight interactive exploration -- notebooks are the real output
+app/ (Streamlit dashboard — 6 analytical pages)
+      Interactive exploration with sentiment, anomaly detection, geographic map
 ```
 
 ## Data Sources
 
-| # | Source | What you get | Library |
-|---|--------|-------------|---------|
-| 1 | Colombian RSS Feeds | News articles from major outlets | `feedparser` |
-| 2 | GDELT | Colombian news events, tone, themes | `requests` |
-| 3 | ACLED | Protests, political violence, social leader killings | `requests` |
+| # | Source | What you get | Records collected | Library |
+|---|--------|-------------|-------------------|---------|
+| 1 | Colombian RSS Feeds | News articles from 5 major outlets | 640 articles | `feedparser` |
+| 2 | GDELT | Colombian news events, tone, themes (30-day window) | 769 articles | `requests` |
+| 3 | ACLED | Protests, political violence, social leader killings (2018--2026) | 31,079 events | `requests` |
 
-**Total infrastructure cost: $0** -- all sources are free or open-access.
+**Total: 32,488 records | Total infrastructure cost: $0** -- all sources are free or open-access.
 
-> **Note on Reddit**: Reddit was initially planned as a social media data source (r/Colombia, ~500-700K members), but was deferred due to API access delays. The architecture supports adding it back when API access is granted.
+> **Note on Reddit**: Reddit was initially planned as a social media data source (r/Colombia, ~500-700K members), but was removed due to API access delays. This is documented transparently as a scope decision -- the architecture supports adding it when API access is granted, since each new source is one fetch function and one normalize function.
 
 ### RSS Feed Availability as a Research Finding
 
@@ -139,6 +145,8 @@ This situation reinforces the project's multi-source design: RSS alone cannot pr
 
 ## Notebook Guide
 
+9 numbered notebooks across 5 stages, each telling a specific part of the analytical story:
+
 | Stage | Notebooks | Purpose |
 |-------|-----------|---------|
 | **1-data** | 2 collection notebooks | Collect from RSS, GDELT+ACLED |
@@ -153,15 +161,22 @@ This situation reinforces the project's multi-source design: RSS alone cannot pr
 |----------|------|
 | Language | Python 3.12 |
 | Package Manager | uv |
-| NLP - Sentiment | pysentimiento (Latin American Spanish) |
+| NLP - Sentiment | pysentimiento (Latin American Spanish, ~500M tweet training set) |
+| NLP - Emotion | pysentimiento emotion detection |
+| NLP - Hate Speech | pysentimiento hate speech detection |
 | NLP - NER | spaCy es_core_news_lg |
 | NLP - Topics | sentence-transformers + sklearn |
+| NLP - Language | Language detection and filtering |
+| Text Processing | Colombian slang normalization |
 | Collection | feedparser, requests |
 | Storage | DuckDB (zero-infrastructure, single file) |
 | Dashboard | Streamlit + Plotly + Folium |
 | Config | PyYAML |
-| CI | GitHub Actions |
+| Quality | ruff + mypy + commitizen (pre-commit hooks) |
+| Testing | pytest (57 tests) |
+| CI/CD | GitHub Actions |
 | Containers | Docker |
+| Docs | MkDocs |
 
 ### Why DuckDB?
 
@@ -174,7 +189,7 @@ This situation reinforces the project's multi-source design: RSS alone cannot pr
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/pulso-electoral/pulso-electoral.git
+git clone https://github.com/juandagalo/pulso-electoral.git
 cd pulso-electoral
 
 # 2. Install dependencies (requires uv: https://docs.astral.sh/uv/)
@@ -202,15 +217,18 @@ make run_app
 ## Development
 
 ```bash
-make test           # Run tests with coverage
+make test           # Run tests with coverage (57 tests)
+make test_verbose   # Run tests in verbose mode
 make check          # Run all pre-commit hooks (ruff, mypy, commitizen)
-make lint           # Run ruff linter only
+make lint           # Run ruff linter only (faster)
 make docs           # Serve MkDocs documentation locally
+make docs_test      # Build docs and check for errors
+make clean          # Remove caches, compiled files, DB files
 ```
 
 ## Team
 
-This project was built for the CIVICUS Digital Democracy Initiative application, combining research expertise in Colombian political culture with data engineering and NLP capabilities.
+This project was built for the CIVICUS Digital Democracy Initiative consulting application, combining research expertise in Colombian political culture with data engineering and NLP capabilities. All code, analysis, and documentation were produced in approximately one week as a technical work sample.
 
 ## License
 
