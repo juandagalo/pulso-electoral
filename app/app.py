@@ -98,7 +98,9 @@ def load_db_posts() -> pd.DataFrame:
             df: pd.DataFrame = conn.execute("SELECT * FROM posts").fetchdf()
             conn.close()
         except Exception:
-            logger.debug("Could not load posts from DuckDB at %s", db_path, exc_info=True)
+            logger.debug(
+                "Could not load posts from DuckDB at %s", db_path, exc_info=True
+            )
             return pd.DataFrame()
         else:
             return df
@@ -107,8 +109,24 @@ def load_db_posts() -> pd.DataFrame:
 
 @st.cache_data
 def load_acled_data() -> pd.DataFrame:
-    """Load ACLED conflict event data if available, otherwise return demo data."""
-    # Try loading real ACLED data
+    """Load ACLED conflict event data from DuckDB, files, or demo fallback."""
+    # 1) Try loading from DuckDB first
+    db_path = DB_PATH if DB_PATH.exists() else DB_PATH_ALT
+    if db_path.exists():
+        try:
+            import duckdb
+
+            conn = duckdb.connect(str(db_path), read_only=True)
+            df: pd.DataFrame = conn.execute("SELECT * FROM acled_events").fetchdf()
+            conn.close()
+            if not df.empty:
+                return df
+        except Exception:
+            logger.debug(
+                "Could not load ACLED from DuckDB at %s", db_path, exc_info=True
+            )
+
+    # 2) Try loading from CSV/Parquet files
     acled_files = list(ACLED_DIR.glob("*.csv")) + list(ACLED_DIR.glob("*.parquet"))
     if acled_files:
         try:
@@ -123,7 +141,7 @@ def load_acled_data() -> pd.DataFrame:
         except Exception:
             logger.debug("Could not load ACLED data", exc_info=True)
 
-    # Demo data — realistic Colombian conflict events
+    # 3) Demo data as fallback
     return _build_demo_acled_data()
 
 
@@ -336,7 +354,9 @@ st.sidebar.markdown("### \U0001f310 Data Freshness")
 if last_collection is not None:
     now = datetime.now(tz=UTC)
     last_aware = (
-        last_collection.replace(tzinfo=UTC) if last_collection.tzinfo is None else last_collection
+        last_collection.replace(tzinfo=UTC)
+        if last_collection.tzinfo is None
+        else last_collection
     )
     days_ago = (now - last_aware).total_seconds() / 86400
 
@@ -400,13 +420,17 @@ if page == "\U0001f4ca Overview":
     st.divider()
 
     if df.empty:
-        st.warning("No data available. Run collection notebooks first, or check data/sample/.")
+        st.warning(
+            "No data available. Run collection notebooks first, or check data/sample/."
+        )
     else:
         # Key metrics
         col1, col2, col3, col4 = st.columns(4)
         col1.metric("Total Posts", len(df))
         col2.metric("Sources", df["source"].nunique() if "source" in df.columns else 0)
-        col3.metric("Platforms", df["platform"].nunique() if "platform" in df.columns else 0)
+        col3.metric(
+            "Platforms", df["platform"].nunique() if "platform" in df.columns else 0
+        )
         col4.metric("Authors", df["author"].nunique() if "author" in df.columns else 0)
 
         st.divider()
@@ -544,7 +568,9 @@ elif page == "\U0001f321\ufe0f Sentiment Thermometer":
         # Sentiment gauge
         with right:
             st.subheader("Positivity Index")
-            pos_ratio = int(sent_counts.get("POS", 0)) / total * 100 if total > 0 else 50
+            pos_ratio = (
+                int(sent_counts.get("POS", 0)) / total * 100 if total > 0 else 50
+            )
             fig = go.Figure(
                 go.Indicator(
                     mode="gauge+number",
@@ -575,7 +601,9 @@ elif page == "\U0001f321\ufe0f Sentiment Thermometer":
             st.subheader("\U0001f4c8 Sentiment Over Time")
             df_time = df_sent.copy()
             df_time["date"] = pd.to_datetime(df_time["timestamp"]).dt.date
-            sent_by_day = df_time.groupby(["date", "sentiment"]).size().reset_index(name="count")
+            sent_by_day = (
+                df_time.groupby(["date", "sentiment"]).size().reset_index(name="count")
+            )
             fig = px.line(
                 sent_by_day,
                 x="date",
@@ -594,7 +622,9 @@ elif page == "\U0001f321\ufe0f Sentiment Thermometer":
 
         # Top positive / negative posts
         st.subheader("\U0001f4dd Top Posts by Sentiment")
-        tab_pos, tab_neg = st.tabs(["\U0001f7e2 Most Positive", "\U0001f534 Most Negative"])
+        tab_pos, tab_neg = st.tabs(
+            ["\U0001f7e2 Most Positive", "\U0001f534 Most Negative"]
+        )
 
         with tab_pos:
             pos_posts = df_sent[df_sent["sentiment"] == "POS"]
@@ -644,7 +674,9 @@ elif page == "\U0001f4c8 Volume & Anomalies":
         # Key metrics
         col1, col2, col3 = st.columns(3)
         col1.metric("Total Days Monitored", len(volume))
-        col2.metric("Avg Daily Volume", f"{volume.mean():.1f}" if len(volume) > 0 else "0")
+        col2.metric(
+            "Avg Daily Volume", f"{volume.mean():.1f}" if len(volume) > 0 else "0"
+        )
         col3.metric(
             "\u26a0\ufe0f Anomalies Detected",
             len(anomalies),
@@ -723,7 +755,11 @@ elif page == "\U0001f4c8 Volume & Anomalies":
                 z = anom["z_score"]
                 val = anom["value"]
                 mean = anom["rolling_mean"]
-                severity = "\U0001f534 High" if abs(z) > _ANOMALY_HIGH_Z else "\U0001f7e1 Moderate"
+                severity = (
+                    "\U0001f534 High"
+                    if abs(z) > _ANOMALY_HIGH_Z
+                    else "\U0001f7e1 Moderate"
+                )
                 st.warning(
                     f"**{ts}** — {severity} (z={z:.2f}): "
                     f"{int(val)} posts vs {mean:.1f} avg "
@@ -741,7 +777,9 @@ elif page == "\U0001f4c8 Volume & Anomalies":
             st.subheader("\U0001f4da Source Breakdown Over Time")
             df_src = df_vol.copy()
             df_src["date"] = df_src["timestamp"].dt.date
-            src_daily = df_src.groupby(["date", "source"]).size().reset_index(name="count")
+            src_daily = (
+                df_src.groupby(["date", "source"]).size().reset_index(name="count")
+            )
             # Keep top 8 sources for readability
             top_sources = df_src["source"].value_counts().head(8).index.tolist()
             src_daily_top = src_daily[src_daily["source"].isin(top_sources)]
@@ -766,7 +804,9 @@ elif page == "\U0001f4c8 Volume & Anomalies":
 # ---------------------------------------------------------------------------
 elif page == "\U0001f5fa\ufe0f Geographic Map":
     st.title("\U0001f5fa\ufe0f Geographic Correlation Map")
-    st.markdown("Conflict events, political violence, and civic space threats across Colombia.")
+    st.markdown(
+        "Conflict events, political violence, and civic space threats across Colombia."
+    )
     st.divider()
 
     acled_df = load_acled_data()
@@ -776,45 +816,92 @@ elif page == "\U0001f5fa\ufe0f Geographic Map":
     else:
         # Check for required columns
         lat_col = next((c for c in ["latitude", "lat"] if c in acled_df.columns), None)
-        lon_col = next((c for c in ["longitude", "lon", "lng"] if c in acled_df.columns), None)
+        lon_col = next(
+            (c for c in ["longitude", "lon", "lng"] if c in acled_df.columns), None
+        )
 
         if lat_col is None or lon_col is None:
             st.error("ACLED data missing latitude/longitude columns.")
         else:
-            # Display note if demo data
-            real_acled = list(ACLED_DIR.glob("*.csv")) + list(ACLED_DIR.glob("*.parquet"))
-            if not real_acled:
+            # Detect if using real or demo data
+            _is_demo = "city" in acled_df.columns and "event_id" not in acled_df.columns
+            if _is_demo:
                 st.info(
                     "\U0001f4a1 **Demo mode** — Showing illustrative conflict events. "
-                    "Run the ACLED collection notebook for real data."
+                    "Run the ACLED collection notebook and data loader for real data."
                 )
 
-            # Metrics
-            col1, col2, col3, col4 = st.columns(4)
-            col1.metric("Total Events", len(acled_df))
+            # Location column — real ACLED uses 'location', demo uses 'city'
+            _loc_col = "location" if "location" in acled_df.columns else "city"
 
-            if "event_type" in acled_df.columns:
-                col2.metric("Event Types", acled_df["event_type"].nunique())
+            # Parse dates for filtering
+            acled_df["_event_date"] = pd.to_datetime(
+                acled_df["event_date"], errors="coerce"
+            )
+            acled_with_dates = acled_df.dropna(subset=["_event_date"])
 
-            if "fatalities" in acled_df.columns:
-                col3.metric(
-                    "Total Fatalities",
-                    int(acled_df["fatalities"].sum()),
-                )
-            if "city" in acled_df.columns:
-                col4.metric("Locations", acled_df["city"].nunique())
+            # --- Date range filter ---
+            if not acled_with_dates.empty:
+                from datetime import timedelta
 
-            st.divider()
+                min_date = acled_with_dates["_event_date"].min().date()
+                max_date = acled_with_dates["_event_date"].max().date()
 
-            # Event type filter
+                # Default to last 2 years to avoid overloading map with 31K markers
+                _two_years_ago = max_date - timedelta(days=730)
+                default_start = max(min_date, _two_years_ago)
+
+                date_col1, date_col2 = st.columns(2)
+                with date_col1:
+                    start_date = st.date_input(
+                        "Start Date",
+                        value=default_start,
+                        min_value=min_date,
+                        max_value=max_date,
+                    )
+                with date_col2:
+                    end_date = st.date_input(
+                        "End Date",
+                        value=max_date,
+                        min_value=min_date,
+                        max_value=max_date,
+                    )
+
+                # Apply date filter
+                filtered_acled = acled_with_dates[
+                    (acled_with_dates["_event_date"].dt.date >= start_date)
+                    & (acled_with_dates["_event_date"].dt.date <= end_date)
+                ].copy()
+            else:
+                filtered_acled = acled_df.copy()
+
+            # --- Event type filter ---
             event_types = ["All"]
-            if "event_type" in acled_df.columns:
-                event_types += sorted(acled_df["event_type"].unique().tolist())
+            if "event_type" in filtered_acled.columns:
+                event_types += sorted(filtered_acled["event_type"].unique().tolist())
             selected_type = st.selectbox("Filter by Event Type", event_types)
 
-            filtered_acled = acled_df.copy()
-            if selected_type != "All" and "event_type" in acled_df.columns:
-                filtered_acled = filtered_acled[filtered_acled["event_type"] == selected_type]
+            if selected_type != "All" and "event_type" in filtered_acled.columns:
+                filtered_acled = filtered_acled[
+                    filtered_acled["event_type"] == selected_type
+                ]
+
+            # --- Metrics row ---
+            col1, col2, col3, col4 = st.columns(4)
+            col1.metric("Events (filtered)", f"{len(filtered_acled):,}")
+
+            if "event_type" in filtered_acled.columns:
+                col2.metric("Event Types", filtered_acled["event_type"].nunique())
+
+            if "fatalities" in filtered_acled.columns:
+                col3.metric(
+                    "Total Fatalities",
+                    f"{int(filtered_acled['fatalities'].sum()):,}",
+                )
+            if _loc_col in filtered_acled.columns:
+                col4.metric("Locations", f"{filtered_acled[_loc_col].nunique():,}")
+
+            st.divider()
 
             # Color map for event types
             event_colors: dict[str, str] = {
@@ -826,6 +913,18 @@ elif page == "\U0001f5fa\ufe0f Geographic Map":
                 "Explosions/Remote violence": "purple",
             }
 
+            # --- Limit markers to avoid browser performance issues ---
+            _map_marker_limit = 2000
+            map_df = filtered_acled.copy()
+            if len(map_df) > _map_marker_limit:
+                map_df = map_df.sort_values("_event_date", ascending=False).head(
+                    _map_marker_limit
+                )
+                st.caption(
+                    f"Showing {_map_marker_limit:,} most recent events of "
+                    f"{len(filtered_acled):,} total (for map performance)."
+                )
+
             # Build Folium map centered on Colombia
             m = folium.Map(
                 location=[4.5709, -74.2973],
@@ -833,58 +932,142 @@ elif page == "\U0001f5fa\ufe0f Geographic Map":
                 tiles="CartoDB dark_matter",
             )
 
-            for _, row in filtered_acled.iterrows():
+            for _, row in map_df.iterrows():
                 lat = row[lat_col]
                 lon = row[lon_col]
+                if pd.isna(lat) or pd.isna(lon):
+                    continue
                 event_type = row.get("event_type", "Unknown")
-                color = event_colors.get(event_type, "gray")
-                city = row.get("city", "Unknown")
-                notes = row.get("notes", "")
-                date = row.get("event_date", "")
-                fatalities = row.get("fatalities", 0)
+                color = event_colors.get(str(event_type), "gray")
+                location_name = row.get(_loc_col, "Unknown")
+                notes = str(row.get("notes", ""))[:300]
+                date = str(row.get("event_date", ""))[:10]
+                fatalities = int(row.get("fatalities", 0))
+                sub_event = row.get("sub_event_type", "")
+                actor = row.get("actor1", "")
 
                 popup_html = (
-                    f"<div style='width:250px;font-family:sans-serif'>"
-                    f"<b style='color:{color}'>{event_type}</b><br>"
-                    f"<b>{city}</b> &mdash; {date}<br>"
+                    f"<div style='width:280px;font-family:sans-serif;font-size:12px'>"
+                    f"<b style='color:{color};font-size:14px'>{event_type}</b><br>"
+                    f"<i>{sub_event}</i><br>"
+                    f"<b>{location_name}</b> &mdash; {date}<br>"
+                )
+                if actor:
+                    popup_html += f"<b>Actor:</b> {actor}<br>"
+                popup_html += (
                     f"<hr style='margin:4px 0'>"
                     f"{notes}<br>"
-                    f"<small>Fatalities: {fatalities}</small>"
+                    f"<small><b>Fatalities: {fatalities}</b></small>"
                     f"</div>"
                 )
 
                 folium.CircleMarker(
-                    location=[lat, lon],
-                    radius=8 + int(fatalities) * 3,
+                    location=[float(lat), float(lon)],
+                    radius=6 + min(fatalities * 2, 20),
                     color=color,
                     fill=True,
                     fill_opacity=0.7,
-                    popup=folium.Popup(popup_html, max_width=300),
-                    tooltip=f"{event_type} — {city}",
+                    popup=folium.Popup(popup_html, max_width=320),
+                    tooltip=f"{event_type} — {location_name} ({date})",
                 ).add_to(m)
 
             st_folium(m, width=None, height=550, use_container_width=True)
 
-            # Event type breakdown chart
-            if "event_type" in acled_df.columns:
-                st.subheader("\U0001f4ca Event Type Distribution")
-                type_counts = acled_df["event_type"].value_counts().reset_index()
-                type_counts.columns = ["Event Type", "Count"]
-                fig = px.bar(
-                    type_counts,
-                    x="Count",
-                    y="Event Type",
-                    orientation="h",
-                    color="Event Type",
-                    color_discrete_map={
-                        "Protests": "#3498DB",
-                        "Violence against civilians": "#E74C3C",
-                        "Battles": "#8E44AD",
-                        "Strategic developments": "#27AE60",
-                    },
+            # --- Summary below the map ---
+            _fat_text = ""
+            if "fatalities" in filtered_acled.columns:
+                _fat_text = (
+                    f" | **{int(filtered_acled['fatalities'].sum()):,} fatalities**"
                 )
-                fig.update_layout(showlegend=False, height=300)
-                st.plotly_chart(fig, use_container_width=True)
+            _type_text = ""
+            if selected_type != "All":
+                _type_text = f" (type: {selected_type})"
+            st.markdown(
+                f"**{len(filtered_acled):,} events** in selected date range"
+                + _type_text
+                + _fat_text
+            )
+
+            st.divider()
+
+            # --- Charts side by side ---
+            if "event_type" in filtered_acled.columns:
+                left_chart, right_chart = st.columns(2)
+
+                with left_chart:
+                    st.subheader("\U0001f4ca Event Type Distribution")
+                    type_counts = (
+                        filtered_acled["event_type"].value_counts().reset_index()
+                    )
+                    type_counts.columns = ["Event Type", "Count"]
+                    fig = px.bar(
+                        type_counts,
+                        x="Count",
+                        y="Event Type",
+                        orientation="h",
+                        color="Event Type",
+                        color_discrete_map={
+                            "Protests": "#3498DB",
+                            "Violence against civilians": "#E74C3C",
+                            "Battles": "#8E44AD",
+                            "Strategic developments": "#27AE60",
+                            "Riots": "#F39C12",
+                            "Explosions/Remote violence": "#9B59B6",
+                        },
+                    )
+                    fig.update_layout(showlegend=False, height=350)
+                    st.plotly_chart(fig, use_container_width=True)
+
+                with right_chart:
+                    st.subheader("\U0001f4c8 Events Over Time")
+                    if "_event_date" in filtered_acled.columns:
+                        time_df = filtered_acled.copy()
+                        time_df["month"] = (
+                            time_df["_event_date"].dt.to_period("M").astype(str)
+                        )
+                        monthly = (
+                            time_df.groupby(["month", "event_type"])
+                            .size()
+                            .reset_index(name="count")
+                        )
+                        fig = px.area(
+                            monthly,
+                            x="month",
+                            y="count",
+                            color="event_type",
+                            title="Monthly Event Volume by Type",
+                            color_discrete_map={
+                                "Protests": "#3498DB",
+                                "Violence against civilians": "#E74C3C",
+                                "Battles": "#8E44AD",
+                                "Strategic developments": "#27AE60",
+                                "Riots": "#F39C12",
+                                "Explosions/Remote violence": "#9B59B6",
+                            },
+                        )
+                        fig.update_layout(
+                            xaxis_title="Month",
+                            yaxis_title="Events",
+                            legend_title="Event Type",
+                            height=350,
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
+
+            # --- Top locations table ---
+            if (
+                _loc_col in filtered_acled.columns
+                and "fatalities" in filtered_acled.columns
+            ):
+                st.subheader("\U0001f4cd Top Affected Locations")
+                top_locations = (
+                    filtered_acled.groupby(_loc_col)
+                    .agg(events=(_loc_col, "count"), fatalities=("fatalities", "sum"))
+                    .sort_values("events", ascending=False)
+                    .head(15)
+                    .reset_index()
+                )
+                top_locations.columns = ["Location", "Events", "Fatalities"]
+                st.dataframe(top_locations, use_container_width=True, height=300)
 
 
 # ---------------------------------------------------------------------------
@@ -924,7 +1107,9 @@ elif page == "\U0001f50d Platform Comparison":
         with right:
             st.subheader("Posts per Source")
             src_platform = (
-                df_analysis.groupby(["platform", "source"]).size().reset_index(name="count")
+                df_analysis.groupby(["platform", "source"])
+                .size()
+                .reset_index(name="count")
             )
             fig = px.treemap(
                 src_platform,
@@ -981,7 +1166,9 @@ elif page == "\U0001f4c2 Data Explorer":
         if selected_source != "All":
             filtered = filtered[filtered["source"] == selected_source]
         if search_text:
-            filtered = filtered[filtered["text"].str.contains(search_text, case=False, na=False)]
+            filtered = filtered[
+                filtered["text"].str.contains(search_text, case=False, na=False)
+            ]
 
         st.markdown(f"**Showing {len(filtered)} of {len(df)} posts**")
         display_cols = [
