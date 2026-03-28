@@ -91,6 +91,7 @@ docstring-code-format = true
 [lint.per-file-ignores]
 "tests/**" = ["S101", "PLR2004"]  # Allow assert statements and magic values in tests
 "*.ipynb" = ["F811", "PLR2004"]  # Notebooks naturally redefine variables; magic values OK in exploratory code
+"scripts/**" = ["PLR0915"]  # Allow many statements in collection scripts
 
 [lint.mccabe]
 # Unlike Flake8, default to a complexity level of 10.

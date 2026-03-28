@@ -161,11 +161,11 @@ def main() -> None:
         domains[domain] = domains.get(domain, 0) + 1
         languages[lang] = languages.get(lang, 0) + 1
 
-    print(f"\nLanguage distribution:")
+    print("\nLanguage distribution:")
     for lang, count in sorted(languages.items(), key=lambda x: -x[1])[:10]:
         print(f"  {lang}: {count}")
 
-    print(f"\nTop 15 source domains:")
+    print("\nTop 15 source domains:")
     for domain, count in sorted(domains.items(), key=lambda x: -x[1])[:15]:
         print(f"  {domain}: {count}")
 
@@ -177,7 +177,7 @@ def main() -> None:
         max_tone = max(tones)
         negative = sum(1 for t in tones if t < 0)
         positive = sum(1 for t in tones if t > 0)
-        print(f"\nTone statistics:")
+        print("\nTone statistics:")
         print(f"  Average: {avg_tone:.2f}")
         print(f"  Range: [{min_tone:.2f}, {max_tone:.2f}]")
         print(f"  Negative articles: {negative}")
