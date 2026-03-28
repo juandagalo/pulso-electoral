@@ -14,7 +14,7 @@ def normalize_post(raw_post: dict, source: str) -> dict:
     raw_post : dict
         Raw post data from a collector.
     source : str
-        Source platform name (e.g., 'rss', 'reddit', 'gdelt', 'acled').
+        Source platform name (e.g., 'rss', 'gdelt', 'acled').
 
     Returns
     -------
@@ -59,10 +59,6 @@ def _extract_text(raw_post: dict, source: str) -> str:
         title = raw_post.get("title", "")
         summary = raw_post.get("summary", "")
         return f"{title}. {summary}" if summary else title
-    if source == "reddit":
-        title = raw_post.get("title", "")
-        body = raw_post.get("selftext", raw_post.get("body", ""))
-        return f"{title}. {body}" if body else title
     return str(raw_post.get("text", raw_post.get("content", "")))
 
 

@@ -15,27 +15,47 @@ _RETRYABLE_STATUS_CODES = {429, 500, 503}
 _HTTP_TOO_MANY_REQUESTS = 429
 
 
+def _get_auth_params() -> dict[str, str]:
+    """Read ACLED API credentials from environment variables.
+
+    ACLED authenticates via ``key`` and ``email`` query parameters
+    on every request (not OAuth2).
+
+    Returns
+    -------
+    dict[str, str]
+        Dictionary with ``key`` and ``email`` entries.
+
+    Raises
+    ------
+    ValueError
+        If credentials are not set in environment.
+    """
+    api_key = os.getenv("ACLED_API_KEY")
+    email = os.getenv("ACLED_API_EMAIL")
+
+    if not api_key or not email:
+        msg = "ACLED_API_KEY and ACLED_API_EMAIL must be set in .env"
+        raise ValueError(msg)
+
+    return {"key": api_key, "email": email}
+
+
 def _fetch_with_retry(
     url: str,
-    headers: dict[str, str],
     params: dict[str, str | int],
     max_attempts: int = 3,
-    method: str = "GET",
 ) -> requests.Response:
-    """HTTP fetch with exponential backoff on transient failures.
+    """HTTP GET with exponential backoff on transient failures.
 
     Parameters
     ----------
     url : str
         Request URL.
-    headers : dict[str, str]
-        HTTP headers.
     params : dict[str, str | int]
-        Query parameters (GET) or form data (POST).
+        Query parameters.
     max_attempts : int
         Maximum number of attempts before raising.
-    method : str
-        HTTP method, either "GET" or "POST".
 
     Returns
     -------
@@ -48,10 +68,7 @@ def _fetch_with_retry(
         If all retry attempts are exhausted.
     """
     for attempt in range(max_attempts):
-        if method == "POST":
-            resp = requests.post(url, data=params, headers=headers, timeout=30)
-        else:
-            resp = requests.get(url, params=params, headers=headers, timeout=30)
+        resp = requests.get(url, params=params, timeout=30)
 
         if resp.status_code not in _RETRYABLE_STATUS_CODES:
             resp.raise_for_status()
@@ -78,6 +95,10 @@ def _fetch_with_retry(
 def _validate_acled_response(data: dict) -> None:
     """Check ACLED JSON response for error indicators.
 
+    ACLED may return HTTP 200 even on logical errors.  The JSON body
+    contains ``"success": true/false`` and a numeric ``"status"`` field
+    that should be checked separately.
+
     Parameters
     ----------
     data : dict
@@ -86,53 +107,16 @@ def _validate_acled_response(data: dict) -> None:
     Raises
     ------
     ValueError
-        If the response contains an error status.
+        If the response indicates a logical error.
     """
+    if data.get("success") is False:
+        msg = f"ACLED API error: {data.get('error', data)}"
+        raise ValueError(msg)
+
     status = data.get("status")
     if status is not None and status not in (0, 200):
         msg = f"ACLED API error (status={status}): {data.get('error', data)}"
         raise ValueError(msg)
-
-
-def _get_acled_token() -> str:
-    """Obtain OAuth 2.0 access token from ACLED API.
-
-    Reads ACLED_EMAIL and ACLED_PASSWORD from environment variables.
-    Posts to the ACLED token endpoint to obtain a 24-hour bearer token.
-
-    Returns
-    -------
-    str
-        OAuth 2.0 access token.
-
-    Raises
-    ------
-    ValueError
-        If credentials are not set in environment.
-    requests.HTTPError
-        If token request fails.
-    """
-    email = os.getenv("ACLED_EMAIL")
-    password = os.getenv("ACLED_PASSWORD")
-
-    if not email or not password:
-        msg = "ACLED_EMAIL and ACLED_PASSWORD must be set in .env"
-        raise ValueError(msg)
-
-    token_url = "https://acleddata.com/oauth/token"  # noqa: S105
-    response = _fetch_with_retry(
-        token_url,
-        headers={},
-        params={
-            "username": email,
-            "password": password,
-            "grant_type": "password",
-            "client_id": "acled",
-        },
-        method="POST",
-    )
-    token: str = response.json()["access_token"]
-    return token
 
 
 def _parse_event(event: dict) -> dict:
@@ -189,7 +173,9 @@ def _filter_by_keywords(events: list[dict], keywords: list[str]) -> list[dict]:
         Filtered subset of events.
     """
     lowered = [kw.lower() for kw in keywords]
-    return [ev for ev in events if any(kw in ev.get("notes", "").lower() for kw in lowered)]
+    return [
+        ev for ev in events if any(kw in ev.get("notes", "").lower() for kw in lowered)
+    ]
 
 
 def query_acled(  # noqa: PLR0913

@@ -25,11 +25,11 @@ def sample_posts() -> list[dict]:
         {
             "id": "test002",
             "text": "Las bodegas digitales estan en plena actividad para las elecciones",
-            "source": "r/Colombia",
-            "platform": "reddit",
-            "author": "usuario_colombiano",
+            "source": "GDELT",
+            "platform": "gdelt",
+            "author": "GDELT",
             "timestamp": "2026-03-20T14:30:00",
-            "url": "https://reddit.com/r/Colombia/comments/abc123",
+            "url": "https://gdeltproject.org/abc123",
         },
         {
             "id": "test003",
@@ -43,11 +43,11 @@ def sample_posts() -> list[dict]:
         {
             "id": "test004",
             "text": "Gonorrea, otra vez subio la gasolina. Este gobierno mamerto nos tiene jodidos",
-            "source": "r/Colombia",
-            "platform": "reddit",
-            "author": "parce_furioso",
+            "source": "Pulzo",
+            "platform": "rss",
+            "author": "Redaccion",
             "timestamp": "2026-03-21T16:00:00",
-            "url": "https://reddit.com/r/Colombia/comments/def456",
+            "url": "https://pulzo.com/nacion/gasolina-sube",
         },
         {
             "id": "test005",

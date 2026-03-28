@@ -97,4 +97,4 @@ docstring-code-format = true
 max-complexity = 10
 
 [lint.isort]
-known-third-party = ["feedparser", "praw", "duckdb", "pysentimiento", "spacy", "sentence_transformers"]
+known-third-party = ["feedparser", "duckdb", "pysentimiento", "spacy", "sentence_transformers"]

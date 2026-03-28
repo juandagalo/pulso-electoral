@@ -4,7 +4,7 @@
 
 Colombia's 2026 election cycle is unfolding under conditions of rising polarization, coordinated digital manipulation, and threats to civic space. Monitoring how these dynamics play out in online discourse requires social listening infrastructure that works with Latin American Spanish, handles the nuances of Colombian political culture, and produces research-grade outputs -- not marketing dashboards.
 
-This project demonstrates that capability. Built in approximately one week, it collects live data from four sources, processes it through NLP models trained on Latin American Spanish, and delivers reproducible analytical notebooks that follow a Signal-Insight-Action-Outcome framework designed for research teams.
+This project demonstrates that capability. Built in approximately one week, it collects live data from three sources, processes it through NLP models trained on Latin American Spanish, and delivers reproducible analytical notebooks that follow a Signal-Insight-Action-Outcome framework designed for research teams.
 
 ---
 
@@ -14,7 +14,7 @@ Everything here is real and running -- not mockups, not planned features.
 
 | What is working | What it produces |
 |-----------------|------------------|
-| 4-source data pipeline (RSS, Reddit, GDELT, ACLED) | Normalized, deduplicated datasets across news, social media, and event databases |
+| 3-source data pipeline (RSS, GDELT, ACLED) | Normalized, deduplicated datasets across news and event databases |
 | Sentiment analysis with `pysentimiento` | Polarity and emotion scores calibrated to Latin American Spanish (trained on ~500M tweets) |
 | Named entity recognition with `spaCy` | Politicians, organizations, and locations extracted from Spanish text |
 | Topic modeling with sentence-transformers | Emerging narrative clusters detected without predefined categories |
@@ -22,7 +22,7 @@ Everything here is real and running -- not mockups, not planned features.
 | Config-driven keyword monitoring | 5 YAML configs: election, manipulation, civic space, political figures, Colombian slang |
 | Tool comparison analysis | Brandwatch vs. open-source evaluation with cost, language, and sustainability criteria |
 | Signal-Insight-Action-Outcome templates | Structured handoff format between data analyst and domain expert |
-| Data ethics and compliance documentation | Reddit API compliance, data minimization, no-model-training policy |
+| Data ethics and compliance documentation | Data minimization, no-model-training policy, source-specific compliance |
 | Zero-cost infrastructure | All sources free, storage embedded (DuckDB), runs on a laptop |
 
 ---
@@ -62,7 +62,7 @@ This demo is a proof of concept, not a finished product. Here is what changes wi
 
 | Dimension | This demo | A funded engagement adds |
 |-----------|-----------|--------------------------|
-| **Data sources** | 4 (RSS, Reddit, GDELT, ACLED) | Telegram, Bluesky, X/Twitter, Facebook (via CrowdTangle or equivalent) |
+| **Data sources** | 3 (RSS, GDELT, ACLED) | Reddit, Telegram, Bluesky, X/Twitter, Facebook (via CrowdTangle or equivalent) |
 | **Collection mode** | Manual notebook runs | Automated scheduled collection (cron/Airflow) |
 | **Analysis depth** | Sentiment, NER, topic clustering | Network analysis, coordination detection, visibility asymmetry, bot scoring |
 | **Geographic scope** | Colombia only | Multi-country (methodology portable via config changes and model swaps) |
@@ -79,7 +79,7 @@ This demo is a proof of concept, not a finished product. Here is what changes wi
 
 Research-grade social listening requires explicit data governance. This project includes both documentation and implementation.
 
-- **Data ethics framework**: [`docs/data_ethics.md`](docs/data_ethics.md) -- covers Reddit API compliance (Responsible Builder Policy), rate limiting, data minimization, no-model-training commitment, and source-specific compliance notes for GDELT and ACLED
+- **Data ethics framework**: [`docs/data_ethics.md`](docs/data_ethics.md) -- covers data minimization, no-model-training commitment, and source-specific compliance notes for GDELT and ACLED
 - **Tool comparison**: [`notebooks/5-appendix/01_mgo_tool_comparison_20260328.ipynb`](notebooks/5-appendix/01_mgo_tool_comparison_20260328.ipynb) -- evaluates Brandwatch, Meltwater, Talkwalker, and Pulsar against the open-source stack on cost, Latin American language support, data ownership, reproducibility, capacity building, and sustainability
 - **General principles**: minimum necessary collection, no re-identification, local storage by default, purpose limitation, credentials never committed
 
@@ -114,11 +114,12 @@ app/ (optional Streamlit dashboard)
 | # | Source | What you get | Library |
 |---|--------|-------------|---------|
 | 1 | Colombian RSS Feeds | News articles from major outlets | `feedparser` |
-| 2 | Reddit r/Colombia | Political discussion (500-700K members) | `praw` |
-| 3 | GDELT | Colombian news events, tone, themes | `requests` |
-| 4 | ACLED | Protests, political violence, social leader killings | `requests` |
+| 2 | GDELT | Colombian news events, tone, themes | `requests` |
+| 3 | ACLED | Protests, political violence, social leader killings | `requests` |
 
 **Total infrastructure cost: $0** -- all sources are free or open-access.
+
+> **Note on Reddit**: Reddit was initially planned as a social media data source (r/Colombia, ~500-700K members), but was deferred due to API access delays. The architecture supports adding it back when API access is granted.
 
 ### RSS Feed Availability as a Research Finding
 
@@ -134,13 +135,13 @@ Of eleven originally targeted Colombian news outlets, only five currently provid
 
 This is not merely a data collection inconvenience. When major outlets close machine-readable data channels, the pool of sources accessible to independent monitors concentrates around those that still offer open feeds. Reduced plurality in accessible sources limits monitoring coverage and raises the barrier for civil society organizations without commercial data subscriptions. This dynamic is directly relevant to civic space health and is documented here as a methodological finding.
 
-This situation reinforces the project's multi-source design: RSS alone cannot provide adequate coverage of the Colombian media landscape, which is why GDELT, ACLED, and Reddit are treated as co-equal primary sources rather than supplements.
+This situation reinforces the project's multi-source design: RSS alone cannot provide adequate coverage of the Colombian media landscape, which is why GDELT and ACLED are treated as co-equal primary sources rather than supplements.
 
 ## Notebook Guide
 
 | Stage | Notebooks | Purpose |
 |-------|-----------|---------|
-| **1-data** | 3 collection notebooks | Collect from RSS, Reddit, GDELT+ACLED |
+| **1-data** | 2 collection notebooks | Collect from RSS, GDELT+ACLED |
 | **2-exploration** | 1 overview notebook | EDA, platform comparison, data quality |
 | **3-analysis** | 3 analysis notebooks | Sentiment, NER, topic modeling |
 | **4-output** | 2 output notebooks | Dataset export + analysis summary (Signal-Insight-Action-Outcome framework) |
@@ -155,7 +156,7 @@ This situation reinforces the project's multi-source design: RSS alone cannot pr
 | NLP - Sentiment | pysentimiento (Latin American Spanish) |
 | NLP - NER | spaCy es_core_news_lg |
 | NLP - Topics | sentence-transformers + sklearn |
-| Collection | feedparser, praw, requests |
+| Collection | feedparser, requests |
 | Storage | DuckDB (zero-infrastructure, single file) |
 | Dashboard | Streamlit + Plotly + Folium |
 | Config | PyYAML |
