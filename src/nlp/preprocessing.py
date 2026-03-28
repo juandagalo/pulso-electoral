@@ -2,16 +2,21 @@
 
 from __future__ import annotations
 
+import logging
 import re
 from pathlib import Path
 
 import yaml
 
+logger = logging.getLogger(__name__)
+
 # Colombian slang normalizations loaded from config
 _slang_map: dict[str, str] | None = None
 
 
-def _load_slang_map(config_path: str | Path = "conf/keywords/slang.yml") -> dict[str, str]:
+def _load_slang_map(
+    config_path: str | Path = "conf/keywords/slang.yml",
+) -> dict[str, str]:
     """Load slang normalization mapping from YAML config.
 
     Parameters
@@ -110,5 +115,5 @@ def detect_language(text: str) -> tuple[str, float]:
         if results:
             return results[0].lang, results[0].prob
     except Exception:
-        pass
+        logger.debug("Language detection failed for text: %.50s...", text, exc_info=True)
     return "unknown", 0.0

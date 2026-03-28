@@ -3,7 +3,7 @@ name = "pulso-electoral"
 version = "0.1.0"
 description = "Social Listening & Digital Manipulation Research for Colombia's 2026 Elections — CIVICUS DDI"
 authors = [
-    "MGO <mgo@pulsoelectoral.org>",
+    { name = "MGO", email = "mgo@pulsoelectoral.org" },
 ]
 requires-python = ">=3.12"
 readme = "README.md"

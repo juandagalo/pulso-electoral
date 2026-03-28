@@ -111,7 +111,7 @@ class TestCollectFeeds:
 
         collect_feeds(["https://a.com/rss", "https://b.com/rss"], delay=0)
 
-        assert mock_get.call_count == 2  # noqa: PLR2004
+        assert mock_get.call_count == 2
 
     @patch("collectors.rss.time.sleep")
     @patch("collectors.rss.requests.get")
@@ -174,7 +174,7 @@ class TestCollectFeeds:
 
         results = collect_feeds(["https://down.com/rss", "https://up.com/rss"], delay=0)
 
-        assert len(results) == 2  # noqa: PLR2004
+        assert len(results) == 2
         assert results[0]["title"] == "Article A"
         assert results[1]["title"] == "Article B"
 
@@ -257,7 +257,7 @@ class TestCollectFeedsFromConfig:
         results = collect_feeds_from_config(config, delay=0)
 
         # Feed1 (1 article) + Feed3 (2 articles) = 3 total
-        assert len(results) == 3  # noqa: PLR2004
+        assert len(results) == 3
 
     @patch("collectors.rss.time.sleep")
     @patch("collectors.rss.requests.get")

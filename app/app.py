@@ -6,12 +6,15 @@
 from __future__ import annotations
 
 import json
+import logging
 import sys
 from pathlib import Path
 
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+
+logger = logging.getLogger(__name__)
 
 # Add src to path so we can import utilities
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
@@ -50,9 +53,11 @@ def load_db_posts() -> pd.DataFrame:
             conn = duckdb.connect(str(DB_PATH), read_only=True)
             df = conn.execute("SELECT * FROM posts").fetchdf()
             conn.close()
-            return df
         except Exception:
-            pass
+            logger.debug("Could not load posts from DuckDB at %s", DB_PATH, exc_info=True)
+            return pd.DataFrame()
+        else:
+            return df
     return pd.DataFrame()
 
 
@@ -173,7 +178,7 @@ elif page == "Data Explorer":
         # Filters
         col1, col2 = st.columns(2)
         with col1:
-            platforms = ["All"] + sorted(df["platform"].unique().tolist())
+            platforms = ["All", *sorted(df["platform"].unique().tolist())]
             selected_platform = st.selectbox("Platform", platforms)
         with col2:
             search_text = st.text_input("Search text", "")

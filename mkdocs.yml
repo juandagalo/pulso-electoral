@@ -13,6 +13,7 @@ nav:
   - Home: index.md
   - Architecture: architecture.md
   - Data Ethics: data_ethics.md
+  - PRD: PRD.md
 
 plugins:
   - search

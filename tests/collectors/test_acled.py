@@ -163,7 +163,7 @@ class TestFetchWithRetry:
         )
 
         assert resp.status_code == _HTTP_OK
-        assert mock_get.call_count == 2  # noqa: PLR2004
+        assert mock_get.call_count == 2
         mock_sleep.assert_called_once_with(2)
 
     @patch("collectors.acled.time.sleep")
@@ -181,7 +181,7 @@ class TestFetchWithRetry:
                 max_attempts=3,
             )
 
-        assert mock_get.call_count == 3  # noqa: PLR2004
+        assert mock_get.call_count == 3
 
     @patch("collectors.acled.time.sleep")
     @patch("collectors.acled.requests.get")
@@ -200,7 +200,7 @@ class TestFetchWithRetry:
         )
 
         assert resp.status_code == _HTTP_OK
-        assert mock_get.call_count == 2  # noqa: PLR2004
+        assert mock_get.call_count == 2
         mock_sleep.assert_called_once_with(1)  # exponential backoff: 1 * 2**0 = 1
 
 
@@ -281,7 +281,7 @@ class TestFilterByKeywords:
         ]
         result = _filter_by_keywords(events, ["electoral", "protest"])
 
-        assert len(result) == 2  # noqa: PLR2004
+        assert len(result) == 2
 
 
 # ---------------------------------------------------------------------------
@@ -319,7 +319,7 @@ class TestQueryAcled:
 
         expected_total = _PAGE_SIZE + page2_count
         assert len(df) == expected_total
-        assert mock_fetch.call_count == 2  # noqa: PLR2004
+        assert mock_fetch.call_count == 2
         # Verify pagination sleep was called between pages
         mock_sleep.assert_called_once_with(1)
 

@@ -19,9 +19,7 @@ logger = logging.getLogger(__name__)
 _FIELDS = ("title", "link", "published", "summary", "author")
 
 
-def collect_feeds(
-    feed_urls: list[str], delay: float = 1.0, timeout: int = 30
-) -> list[dict]:
+def collect_feeds(feed_urls: list[str], delay: float = 1.0, timeout: int = 30) -> list[dict]:
     """Fetch each URL with *timeout* seconds, parse RSS, return article dicts."""
     articles: list[dict] = []
     for url in feed_urls:

@@ -70,6 +70,7 @@ ignore = [
     "S101", # bandit: Use of `assert` detected
     "E501", # Like Black, ignore E501 (line too long) to avoid conflicts.
     "TRY003", # tryceratops: Avoid long error messages
+    "PLC0415", # pylint: Allow lazy imports (heavy ML libs loaded inside functions)
     ]
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
@@ -86,6 +87,10 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 # Enable auto-formatting of code examples in docstrings.
 docstring-code-format = true
+
+[lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004"]  # Allow assert statements and magic values in tests
+"*.ipynb" = ["F811", "PLR2004"]  # Notebooks naturally redefine variables; magic values OK in exploratory code
 
 [lint.mccabe]
 # Unlike Flake8, default to a complexity level of 10.
