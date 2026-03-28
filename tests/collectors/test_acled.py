@@ -63,7 +63,7 @@ def parsed_acled_event() -> dict:
         "actor2": "",
         "assoc_actor_1": "Labor Group (Colombia)",
         "assoc_actor_2": "",
-        "inter1": 6,
+        "inter1": "6",
         "location": "Bogota",
         "latitude": 4.7110,
         "longitude": -74.0721,
@@ -101,10 +101,14 @@ class TestGetAcledToken:
     """Tests for the _get_acled_token function."""
 
     @patch("collectors.acled._fetch_with_retry")
-    @patch.dict("os.environ", {"ACLED_EMAIL": "user@test.com", "ACLED_PASSWORD": "s3cret"})
+    @patch.dict(
+        "os.environ", {"ACLED_EMAIL": "user@test.com", "ACLED_PASSWORD": "s3cret"}
+    )
     def test_get_acled_token_success(self, mock_fetch: MagicMock) -> None:
         """Should return the access_token string on successful POST."""
-        mock_fetch.return_value = _make_response(_HTTP_OK, {"access_token": "tok_abc123"})
+        mock_fetch.return_value = _make_response(
+            _HTTP_OK, {"access_token": "tok_abc123"}
+        )
 
         token = _get_acled_token()
 
@@ -130,7 +134,9 @@ class TestGetAcledToken:
     @patch.dict("os.environ", {}, clear=True)
     def test_get_acled_token_missing_credentials(self) -> None:
         """Should raise ValueError when ACLED_EMAIL or ACLED_PASSWORD are missing."""
-        with pytest.raises(ValueError, match="ACLED_EMAIL and ACLED_PASSWORD must be set"):
+        with pytest.raises(
+            ValueError, match="ACLED_EMAIL and ACLED_PASSWORD must be set"
+        ):
             _get_acled_token()
 
 
@@ -179,7 +185,9 @@ class TestFetchWithRetry:
 
     @patch("collectors.acled.time.sleep")
     @patch("collectors.acled.requests.get")
-    def test_fetch_with_retry_exhausted(self, mock_get: MagicMock, mock_sleep: MagicMock) -> None:
+    def test_fetch_with_retry_exhausted(
+        self, mock_get: MagicMock, mock_sleep: MagicMock
+    ) -> None:
         """Should raise HTTPError after all retry attempts are exhausted."""
         resp_500 = _make_response(500)
         mock_get.return_value = resp_500
@@ -269,13 +277,15 @@ class TestValidateAcledResponse:
 class TestParseEvent:
     """Tests for the _parse_event function."""
 
-    def test_parse_event(self, sample_acled_event: dict, parsed_acled_event: dict) -> None:
-        """Should map all 21 fields correctly, including inter1 as int."""
+    def test_parse_event(
+        self, sample_acled_event: dict, parsed_acled_event: dict
+    ) -> None:
+        """Should map all 21 fields correctly, including inter1 as str."""
         result = _parse_event(sample_acled_event)
 
         assert result == parsed_acled_event
         assert len(result) == _ACLED_FIELD_COUNT
-        assert isinstance(result["inter1"], int)
+        assert isinstance(result["inter1"], str)
         assert isinstance(result["geo_precision"], int)
         assert isinstance(result["fatalities"], int)
         assert isinstance(result["latitude"], float)

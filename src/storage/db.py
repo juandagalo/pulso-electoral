@@ -6,7 +6,9 @@ import duckdb
 import pandas as pd
 
 
-def get_connection(db_path: str = "data/pulso_electoral.db") -> duckdb.DuckDBPyConnection:
+def get_connection(
+    db_path: str = "data/pulso_electoral.db",
+) -> duckdb.DuckDBPyConnection:
     """Get or create a DuckDB connection.
 
     Parameters
@@ -79,7 +81,7 @@ def create_tables(conn: duckdb.DuckDBPyConnection) -> None:
             actor2 VARCHAR,
             assoc_actor_1 VARCHAR,
             assoc_actor_2 VARCHAR,
-            inter1 INTEGER,
+            inter1 VARCHAR,
             location VARCHAR,
             latitude FLOAT,
             longitude FLOAT,
@@ -101,7 +103,7 @@ _ACLED_MIGRATION_COLUMNS: list[tuple[str, str]] = [
     ("disorder_type", "VARCHAR"),
     ("assoc_actor_1", "VARCHAR"),
     ("assoc_actor_2", "VARCHAR"),
-    ("inter1", "INTEGER"),
+    ("inter1", "VARCHAR"),
     ("geo_precision", "INTEGER"),
     ("civilian_targeting", "VARCHAR"),
     ("tags", "TEXT"),
@@ -120,7 +122,9 @@ def _migrate_acled_events(conn: duckdb.DuckDBPyConnection) -> None:
         Active DuckDB connection.
     """
     for col_name, col_type in _ACLED_MIGRATION_COLUMNS:
-        conn.execute(f"ALTER TABLE acled_events ADD COLUMN IF NOT EXISTS {col_name} {col_type}")
+        conn.execute(
+            f"ALTER TABLE acled_events ADD COLUMN IF NOT EXISTS {col_name} {col_type}"
+        )
 
 
 def insert_df(conn: duckdb.DuckDBPyConnection, table: str, df: pd.DataFrame) -> int:

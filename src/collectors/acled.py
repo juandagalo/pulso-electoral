@@ -194,7 +194,7 @@ def _parse_event(event: dict) -> dict:
         "actor2": event.get("actor2", ""),
         "assoc_actor_1": event.get("assoc_actor_1", ""),
         "assoc_actor_2": event.get("assoc_actor_2", ""),
-        "inter1": int(event.get("inter1", 0)),
+        "inter1": str(event.get("inter1", "")),
         "location": event.get("location", ""),
         "latitude": float(event.get("latitude", 0)),
         "longitude": float(event.get("longitude", 0)),
@@ -225,7 +225,9 @@ def _filter_by_keywords(events: list[dict], keywords: list[str]) -> list[dict]:
         Filtered subset of events.
     """
     lowered = [kw.lower() for kw in keywords]
-    return [ev for ev in events if any(kw in ev.get("notes", "").lower() for kw in lowered)]
+    return [
+        ev for ev in events if any(kw in ev.get("notes", "").lower() for kw in lowered)
+    ]
 
 
 def query_acled(  # noqa: PLR0913
