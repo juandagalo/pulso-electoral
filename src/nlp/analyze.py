@@ -45,7 +45,7 @@ def analyze_sentiment(texts: list[str]) -> list[dict]:
     analyzer = get_analyzer("sentiment")
     return [
         {"label": r.output, "probas": r.probas}
-        for r in [analyzer.predict(t) for t in texts]  # type: ignore[union-attr]
+        for r in [analyzer.predict(t) for t in texts]  # type: ignore[attr-defined]
     ]
 
 
@@ -65,7 +65,7 @@ def analyze_emotion(texts: list[str]) -> list[dict]:
     analyzer = get_analyzer("emotion")
     return [
         {"label": r.output, "probas": r.probas}
-        for r in [analyzer.predict(t) for t in texts]  # type: ignore[union-attr]
+        for r in [analyzer.predict(t) for t in texts]  # type: ignore[attr-defined]
     ]
 
 
@@ -85,5 +85,5 @@ def analyze_hate_speech(texts: list[str]) -> list[dict]:
     analyzer = get_analyzer("hate_speech")
     return [
         {"label": r.output, "probas": r.probas}
-        for r in [analyzer.predict(t) for t in texts]  # type: ignore[union-attr]
+        for r in [analyzer.predict(t) for t in texts]  # type: ignore[attr-defined]
     ]

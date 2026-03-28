@@ -32,7 +32,8 @@ def load_config(path: str | Path) -> dict:
         msg = f"Configuration file not found: {path}"
         raise FileNotFoundError(msg)
     with open(path) as f:
-        return yaml.safe_load(f)
+        result = yaml.safe_load(f)
+    return dict(result)
 
 
 def load_keywords(category: str, conf_dir: str | Path = "conf/keywords") -> list[str]:
@@ -51,7 +52,7 @@ def load_keywords(category: str, conf_dir: str | Path = "conf/keywords") -> list
         List of keywords for the given category.
     """
     config = load_config(Path(conf_dir) / f"{category}.yml")
-    return config.get("keywords", [])
+    return list(config.get("keywords", []))
 
 
 def load_all_keywords(conf_dir: str | Path = "conf/keywords") -> dict[str, list[str]]:

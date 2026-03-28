@@ -27,10 +27,15 @@ def detect_anomalies(
         List of anomaly dicts with keys: timestamp, value, z_score, rolling_mean,
         rolling_std.
     """
-    rolling_mean = series.rolling(window=window, min_periods=1).mean()
-    rolling_std = series.rolling(window=window, min_periods=1).std()
+    # Shift rolling stats by 1 so each point is compared against the
+    # *previous* window — the current observation must NOT influence its
+    # own baseline, otherwise spikes inflate the mean/std and hide themselves.
+    rolling_mean = series.rolling(window=window, min_periods=1).mean().shift(1)
+    rolling_std = series.rolling(window=window, min_periods=1).std().shift(1)
 
-    # Avoid division by zero
+    # Replace zero std with a tiny value to avoid division by zero
+    # (happens when the prior window is constant). NaN stays NaN so
+    # points without enough prior history are naturally excluded.
     rolling_std = rolling_std.replace(0, 1e-10)
 
     z_scores = (series - rolling_mean) / rolling_std
@@ -38,7 +43,7 @@ def detect_anomalies(
     anomalies = []
     for idx in z_scores.index:
         z = z_scores[idx]
-        if abs(z) >= threshold:
+        if pd.notna(z) and abs(z) >= threshold:
             anomalies.append(
                 {
                     "timestamp": str(idx),
