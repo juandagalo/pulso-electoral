@@ -1,4 +1,14 @@
-"""ACLED conflict and protest event data collection."""
+"""ACLED conflict and protest event data collection.
+
+Uses OAuth 2.0 password-grant authentication against the official
+ACLED API at ``https://acleddata.com/api/``.
+
+References
+----------
+- API docs : https://acleddata.com/api-documentation/getting-started
+- Token URL: https://acleddata.com/oauth/token
+- Data URL : https://acleddata.com/api/acled/read
+"""
 
 from __future__ import annotations
 
@@ -13,47 +23,75 @@ logger = logging.getLogger(__name__)
 
 _RETRYABLE_STATUS_CODES = {429, 500, 503}
 _HTTP_TOO_MANY_REQUESTS = 429
+_HTTP_FORBIDDEN = 403
+
+_TOKEN_URL = "https://acleddata.com/oauth/token"  # noqa: S105
+_DATA_URL = "https://acleddata.com/api/acled/read"
 
 
-def _get_auth_params() -> dict[str, str]:
-    """Read ACLED API credentials from environment variables.
+def _get_acled_token() -> str:
+    """Obtain an OAuth 2.0 access token from the ACLED token endpoint.
 
-    ACLED authenticates via ``key`` and ``email`` query parameters
-    on every request (not OAuth2).
+    Reads ``ACLED_EMAIL`` and ``ACLED_PASSWORD`` from environment variables
+    and performs a password-grant token request.
 
     Returns
     -------
-    dict[str, str]
-        Dictionary with ``key`` and ``email`` entries.
+    str
+        Bearer access token.
 
     Raises
     ------
     ValueError
-        If credentials are not set in environment.
+        If credentials are not set in the environment.
+    requests.HTTPError
+        If the token endpoint returns an HTTP error.
     """
-    api_key = os.getenv("ACLED_API_KEY")
-    email = os.getenv("ACLED_API_EMAIL")
+    email = os.getenv("ACLED_EMAIL")
+    password = os.getenv("ACLED_PASSWORD")
 
-    if not api_key or not email:
-        msg = "ACLED_API_KEY and ACLED_API_EMAIL must be set in .env"
+    if not email or not password:
+        msg = "ACLED_EMAIL and ACLED_PASSWORD must be set in .env"
         raise ValueError(msg)
 
-    return {"key": api_key, "email": email}
+    resp = _fetch_with_retry(
+        _TOKEN_URL,
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        data={
+            "username": email,
+            "password": password,
+            "grant_type": "password",
+            "client_id": "acled",
+        },
+        method="POST",
+    )
+
+    return str(resp.json()["access_token"])
 
 
-def _fetch_with_retry(
+def _fetch_with_retry(  # noqa: PLR0913
     url: str,
-    params: dict[str, str | int],
+    *,
+    headers: dict[str, str] | None = None,
+    params: dict[str, str | int] | None = None,
+    data: dict[str, str] | None = None,
+    method: str = "GET",
     max_attempts: int = 3,
 ) -> requests.Response:
-    """HTTP GET with exponential backoff on transient failures.
+    """HTTP request with exponential backoff on transient failures.
 
     Parameters
     ----------
     url : str
         Request URL.
-    params : dict[str, str | int]
-        Query parameters.
+    headers : dict[str, str] | None
+        HTTP headers.
+    params : dict[str, str | int] | None
+        Query-string parameters (used for GET requests).
+    data : dict[str, str] | None
+        Form-encoded body (used for POST requests).
+    method : str
+        HTTP method — ``"GET"`` (default) or ``"POST"``.
     max_attempts : int
         Maximum number of attempts before raising.
 
@@ -65,10 +103,24 @@ def _fetch_with_retry(
     Raises
     ------
     requests.HTTPError
-        If all retry attempts are exhausted.
+        If all retry attempts are exhausted or a non-retryable error occurs.
     """
     for attempt in range(max_attempts):
-        resp = requests.get(url, params=params, timeout=30)
+        if method.upper() == "POST":
+            resp = requests.post(url, headers=headers, data=data, timeout=30)
+        else:
+            resp = requests.get(url, headers=headers, params=params, timeout=30)
+
+        if resp.status_code == _HTTP_FORBIDDEN:
+            msg = (
+                "ACLED API returned 403 Forbidden. Your myACLED account may need "
+                "Research tier access. Accounts with personal emails (gmail, etc.) "
+                "are limited to Open tier which does NOT include API access. "
+                "Re-register with an institutional email or contact "
+                "sales@acleddata.com"
+            )
+            logger.error(msg)
+            resp.raise_for_status()
 
         if resp.status_code not in _RETRYABLE_STATUS_CODES:
             resp.raise_for_status()
@@ -173,9 +225,7 @@ def _filter_by_keywords(events: list[dict], keywords: list[str]) -> list[dict]:
         Filtered subset of events.
     """
     lowered = [kw.lower() for kw in keywords]
-    return [
-        ev for ev in events if any(kw in ev.get("notes", "").lower() for kw in lowered)
-    ]
+    return [ev for ev in events if any(kw in ev.get("notes", "").lower() for kw in lowered)]
 
 
 def query_acled(  # noqa: PLR0913
@@ -188,7 +238,8 @@ def query_acled(  # noqa: PLR0913
 ) -> pd.DataFrame:
     """Query ACLED API for conflict and protest events.
 
-    Uses OAuth 2.0 authentication and paginates automatically.
+    Uses OAuth 2.0 password-grant authentication and paginates
+    automatically through all result pages.
 
     Parameters
     ----------
@@ -213,13 +264,15 @@ def query_acled(  # noqa: PLR0913
     """
     access_token = _get_acled_token()
 
-    base_url = "https://acleddata.com/api/acled/read"
-    headers = {"Authorization": f"Bearer {access_token}"}
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json",
+    }
 
     params: dict[str, str | int] = {
         "country": country,
         "limit": limit,
-        "inter_num": 1,
+        "_format": "json",
     }
 
     if event_types:
@@ -237,7 +290,7 @@ def query_acled(  # noqa: PLR0913
 
     while True:
         params["page"] = page
-        response = _fetch_with_retry(base_url, headers=headers, params=params)
+        response = _fetch_with_retry(_DATA_URL, headers=headers, params=params)
         data = response.json()
 
         _validate_acled_response(data)

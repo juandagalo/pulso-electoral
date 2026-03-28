@@ -112,6 +112,11 @@ class TestGetAcledToken:
         mock_fetch.assert_called_once()
         call_kwargs = mock_fetch.call_args
         assert call_kwargs.kwargs["method"] == "POST"
+        # Verify OAuth2 password-grant form data
+        form_data = call_kwargs.kwargs["data"]
+        assert form_data["username"] == "user@test.com"
+        assert form_data["grant_type"] == "password"
+        assert form_data["client_id"] == "acled"
 
     @patch("collectors.acled._fetch_with_retry")
     @patch.dict("os.environ", {"ACLED_EMAIL": "user@test.com", "ACLED_PASSWORD": "bad"})
@@ -120,6 +125,12 @@ class TestGetAcledToken:
         mock_fetch.side_effect = requests.HTTPError("401 Unauthorized")
 
         with pytest.raises(requests.HTTPError):
+            _get_acled_token()
+
+    @patch.dict("os.environ", {}, clear=True)
+    def test_get_acled_token_missing_credentials(self) -> None:
+        """Should raise ValueError when ACLED_EMAIL or ACLED_PASSWORD are missing."""
+        with pytest.raises(ValueError, match="ACLED_EMAIL and ACLED_PASSWORD must be set"):
             _get_acled_token()
 
 
@@ -202,6 +213,33 @@ class TestFetchWithRetry:
         assert resp.status_code == _HTTP_OK
         assert mock_get.call_count == 2
         mock_sleep.assert_called_once_with(1)  # exponential backoff: 1 * 2**0 = 1
+
+    @patch("collectors.acled.requests.post")
+    def test_fetch_with_retry_post_method(self, mock_post: MagicMock) -> None:
+        """Should use requests.post when method='POST'."""
+        mock_post.return_value = _make_response(_HTTP_OK, {"access_token": "tok"})
+
+        resp = _fetch_with_retry(
+            "https://acleddata.com/oauth/token",
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            data={"grant_type": "password"},
+            method="POST",
+        )
+
+        assert resp.status_code == _HTTP_OK
+        mock_post.assert_called_once()
+
+    @patch("collectors.acled.requests.get")
+    def test_fetch_with_retry_403_error_message(self, mock_get: MagicMock) -> None:
+        """Should raise HTTPError with clear message on 403 Forbidden."""
+        mock_get.return_value = _make_response(403)
+
+        with pytest.raises(requests.HTTPError):
+            _fetch_with_retry(
+                "https://acleddata.com/api/acled/read",
+                headers={"Authorization": "Bearer tok"},
+                params={"country": "Colombia"},
+            )
 
 
 # ---------------------------------------------------------------------------
