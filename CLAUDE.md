@@ -19,7 +19,6 @@ This is a **research project, NOT a software product**. Notebooks are the primar
 
 ### Data Collection
 - `make collect_rss` - Run RSS collection notebook
-- `make collect_reddit` - Run Reddit collection notebook
 - `make collect_gdelt_acled` - Run GDELT + ACLED collection notebook
 - `make collect_all` - Run all collection notebooks sequentially
 - `make analyze` - Run all analysis notebooks (sentiment, NER, topics)
@@ -135,7 +134,7 @@ All loaded with `yaml.safe_load()` via `src/utils/config.py`.
 | NLP - Sentiment | pysentimiento (Latin American Spanish) |
 | NLP - NER | spaCy es_core_news_lg |
 | NLP - Topics | sentence-transformers + sklearn |
-| Collection | feedparser, praw, requests |
+| Collection | feedparser, requests |
 | Storage | DuckDB |
 | Dashboard | Streamlit + Plotly + Folium |
 | Config | PyYAML (yaml.safe_load) |

@@ -20,20 +20,20 @@
   {
     "id": "sample_003",
     "text": "Parcero, ustedes creen que las elecciones van a cambiar algo? Llevamos decadas con la misma rosca de siempre, no importa si es de izquierda o derecha. Todos son iguales.",
-    "source": "r/Colombia",
-    "platform": "reddit",
-    "author": "colombiano_esceptico",
+    "source": "La Silla Vacia",
+    "platform": "rss",
+    "author": "Columna de Opinion",
     "timestamp": "2026-03-18T14:00:00",
-    "url": "https://reddit.com/r/Colombia/comments/abc001"
+    "url": "https://lasillavacia.com/opinion/elecciones-escepticismo"
   },
   {
     "id": "sample_004",
     "text": "Las bodegas digitales del uribismo estan trabajando horas extras. Miren como inundan Twitter con el mismo mensaje contra la reforma agraria. Comportamiento inautentico coordinado.",
-    "source": "r/Colombia",
-    "platform": "reddit",
-    "author": "detective_digital",
+    "source": "La Silla Vacia",
+    "platform": "rss",
+    "author": "Equipo de Investigacion",
     "timestamp": "2026-03-18T16:00:00",
-    "url": "https://reddit.com/r/Colombia/comments/abc002"
+    "url": "https://lasillavacia.com/historias/bodegas-uribismo-reforma"
   },
   {
     "id": "sample_005",
@@ -47,20 +47,20 @@
   {
     "id": "sample_006",
     "text": "La paz total de Petro es una chimba de idea. Por fin un presidente que le apuesta a la negociacion y no a la guerra. Los que critican nunca han vivido el conflicto.",
-    "source": "r/Colombia",
-    "platform": "reddit",
-    "author": "petrista_convencido",
+    "source": "Razon Publica",
+    "platform": "rss",
+    "author": "Columna Invitada",
     "timestamp": "2026-03-19T09:00:00",
-    "url": "https://reddit.com/r/Colombia/comments/abc003"
+    "url": "https://razonpublica.com/paz-total-opinion"
   },
   {
     "id": "sample_007",
     "text": "Gonorrea, este gobierno mamerto nos tiene jodidos. La gasolina sube, el dolar sube, todo sube menos el sueldo. Y Petro hablandole al pueblo como si fueramos brutos.",
-    "source": "r/Colombia",
-    "platform": "reddit",
-    "author": "indignado_2026",
+    "source": "Pulzo",
+    "platform": "rss",
+    "author": "Redaccion",
     "timestamp": "2026-03-19T11:00:00",
-    "url": "https://reddit.com/r/Colombia/comments/abc004"
+    "url": "https://pulzo.com/nacion/gasolina-sube-opinion"
   },
   {
     "id": "sample_008",
@@ -83,11 +83,11 @@
   {
     "id": "sample_010",
     "text": "Uribe desde su finca sigue manejando todo. Los candidatos de Centro Democratico le piden la bendicion antes de decir cualquier cosa. La maquinaria uribista no descansa.",
-    "source": "r/Colombia",
-    "platform": "reddit",
-    "author": "analista_politico_reddit",
+    "source": "La Silla Vacia",
+    "platform": "rss",
+    "author": "Juanita Leon",
     "timestamp": "2026-03-19T17:00:00",
-    "url": "https://reddit.com/r/Colombia/comments/abc005"
+    "url": "https://lasillavacia.com/historias/uribe-maquinaria"
   },
   {
     "id": "sample_011",
@@ -110,11 +110,11 @@
   {
     "id": "sample_013",
     "text": "Ojo con la compra de votos en la costa. Ya empezaron a repartir mercados y plata. La maquinaria politica de siempre, ahora con logos nuevos. La MOE deberia investigar.",
-    "source": "r/Colombia",
-    "platform": "reddit",
-    "author": "costeno_preocupado",
+    "source": "El Tiempo",
+    "platform": "rss",
+    "author": "Redaccion Politica",
     "timestamp": "2026-03-20T11:00:00",
-    "url": "https://reddit.com/r/Colombia/comments/abc006"
+    "url": "https://eltiempo.com/politica/compra-votos-costa"
   },
   {
     "id": "sample_014",
@@ -155,11 +155,11 @@
   {
     "id": "sample_018",
     "text": "A mi me da igual quien gane. Todos prometen lo mismo y despues se olvidan del pueblo. Lo unico que cambia es el color de la bandera del partido. Colombia no tiene arreglo, marica.",
-    "source": "r/Colombia",
-    "platform": "reddit",
-    "author": "desencantado_total",
+    "source": "Pulzo",
+    "platform": "rss",
+    "author": "Redaccion",
     "timestamp": "2026-03-21T10:00:00",
-    "url": "https://reddit.com/r/Colombia/comments/abc007"
+    "url": "https://pulzo.com/nacion/opinion-elecciones-desencanto"
   },
   {
     "id": "sample_019",
@@ -190,12 +190,12 @@
   },
   {
     "id": "sample_022",
-    "text": "Los petrotroles inundaron Reddit. Todo post que critique al gobierno tiene 50 downvotes en minutos. La bodega petrista es real y organizada. Hasta tienen turnos.",
-    "source": "r/Colombia",
-    "platform": "reddit",
-    "author": "opositor_digital",
+    "text": "Los trolls inundaron las redes sociales. Todo post que critique al gobierno tiene 50 downvotes en minutos. La bodega petrista es real y organizada. Hasta tienen turnos.",
+    "source": "El Espectador",
+    "platform": "rss",
+    "author": "Columna de Opinion",
     "timestamp": "2026-03-21T18:00:00",
-    "url": "https://reddit.com/r/Colombia/comments/abc008"
+    "url": "https://elespectador.com/opinion/bodegas-digitales-petrismo"
   },
   {
     "id": "sample_023",
@@ -217,11 +217,11 @@
   },
   {
     "id": "sample_025",
-    "text": "Que chimba que la juventud colombiana se este metiendo en politica. En mi epoca nadie hablaba de elecciones. Ahora los pelados debaten en TikTok y Reddit. Eso es bacano, parceros.",
-    "source": "r/Colombia",
-    "platform": "reddit",
-    "author": "abuelo_digital",
+    "text": "Que chimba que la juventud colombiana se este metiendo en politica. En mi epoca nadie hablaba de elecciones. Ahora los pelados debaten en TikTok y en redes. Eso es bacano, parceros.",
+    "source": "Pulzo",
+    "platform": "rss",
+    "author": "Columna de Opinion",
     "timestamp": "2026-03-22T12:00:00",
-    "url": "https://reddit.com/r/Colombia/comments/abc009"
+    "url": "https://pulzo.com/nacion/juventud-politica-colombia"
   }
 ]

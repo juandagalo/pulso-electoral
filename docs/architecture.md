@@ -14,9 +14,9 @@ Pulso Electoral Colombia 2026 follows a research-first architecture where notebo
 
 ```
 Colombian RSS Feeds ----\
-Reddit r/Colombia -------+--> data/01_raw/
-GDELT Project -----------/        |
-ACLED Data --------------/        v
+GDELT Project -----------+--> data/01_raw/
+ACLED Data --------------/        |
+                                  v
                            data/02_intermediate/ (common schema)
                                   |
                                   v

@@ -16,7 +16,7 @@ This project demonstrates that capability.
 
 | What is working | What it produces |
 |-----------------|------------------|
-| 4-source data pipeline (RSS, Reddit, GDELT, ACLED) | Normalized, deduplicated datasets across news, social media, and event databases |
+| 3-source data pipeline (RSS, GDELT, ACLED) | Normalized, deduplicated datasets across news and event databases |
 | Sentiment analysis with `pysentimiento` | Polarity and emotion scores calibrated to Latin American Spanish |
 | Named entity recognition with `spaCy` | Politicians, organizations, and locations extracted from Spanish text |
 | Topic modeling with sentence-transformers | Emerging narrative clusters detected without predefined categories |

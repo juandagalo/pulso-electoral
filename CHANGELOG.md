@@ -10,7 +10,7 @@ and this project adheres to [Conventional Commits](https://www.conventionalcommi
 ### Added
 
 - Initial project scaffold with research-first architecture
-- Data collection utilities for RSS, Reddit, GDELT, ACLED
+- Data collection utilities for RSS, GDELT, ACLED
 - NLP analysis helpers using pysentimiento, spaCy, sentence-transformers + sklearn
 - Anomaly detection module
 - DuckDB storage layer
