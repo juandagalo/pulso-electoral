@@ -6,7 +6,12 @@ filters:
   country: "Colombia"
   iso: 100  # ISO numeric code (optional)
 
-  # Event types to collect
+  # Event types to collect.
+  # NOTE: "Strategic developments" is intentionally kept — it captures
+  # political agreements, peace negotiations, and policy changes that are
+  # directly relevant to electoral/civic space monitoring. Without keyword
+  # filtering it would be noisy, but filter_mode: required ensures only
+  # electoral/civic-space events pass through.
   event_types:
     - "Protests"
     - "Riots"
@@ -47,12 +52,49 @@ settings:
   token_url: "https://acleddata.com/oauth/token"
   # Maximum records per request
   limit: 5000
-  # Focus on events related to social leaders and civic organizations
+
+  # Post-filter mode: "required" means ALWAYS apply notes_keywords after fetching.
+  # Without this filter, a 3-month Colombia query returns ~31,000 events — most of
+  # which are narco-violence and armed group battles irrelevant to elections/civic space.
+  # The keywords below reduce the result set to only electoral and civic space events.
+  filter_mode: "required"
+
+  # Keywords to match against ACLED event notes (case-insensitive, any match = keep).
+  # Drawn from conf/keywords/election.yml and conf/keywords/civic_space.yml.
+  # Kept focused at 25 terms — one hit is enough to flag an event as relevant.
   notes_keywords:
+    # --- Electoral process ---
+    - "elecciones"
+    - "candidato"
+    - "candidata"
+    - "campana electoral"
+    - "partido politico"
+    - "votacion"
+    - "Registraduria"
+    - "congreso"
+    - "debate presidencial"
+    - "jornada electoral"
+
+    # --- Social leaders & human rights defenders ---
     - "lider social"
+    - "lideres sociales"
     - "defensor de derechos"
+    - "defensor de derechos humanos"
+    - "defensora de derechos humanos"
+    - "asesinato de lideres"
+
+    # --- Civic space & protest ---
     - "sociedad civil"
+    - "protesta social"
+    - "libertad de prensa"
+    - "ESMAD"
+    - "criminalizacion de la protesta"
+    - "represion"
+    - "uso excesivo de fuerza"
+
+    # --- Press freedom ---
     - "periodista"
+    - "periodistas amenazados"
 
 # Fallback: If ACLED registration is pending, use GDELT protest events
 fallback:

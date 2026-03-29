@@ -130,6 +130,9 @@ def _migrate_acled_events(conn: duckdb.DuckDBPyConnection) -> None:
 def insert_df(conn: duckdb.DuckDBPyConnection, table: str, df: pd.DataFrame) -> int:
     """Insert a DataFrame into a table. Returns rows inserted.
 
+    Uses explicit column names from the DataFrame so the insert is robust against
+    extra columns added to the table via migrations (e.g. is_election on posts).
+
     Parameters
     ----------
     conn : duckdb.DuckDBPyConnection
@@ -146,7 +149,10 @@ def insert_df(conn: duckdb.DuckDBPyConnection, table: str, df: pd.DataFrame) -> 
     """
     if df.empty:
         return 0
-    conn.execute(f"INSERT OR IGNORE INTO {table} SELECT * FROM df")  # noqa: S608
+    cols = ", ".join(df.columns.tolist())
+    conn.execute(
+        f"INSERT OR IGNORE INTO {table} ({cols}) SELECT {cols} FROM df"  # noqa: S608
+    )
     return len(df)
 
 

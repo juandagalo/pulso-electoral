@@ -15,6 +15,7 @@ from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
+import yaml
 
 # Add src to path so we can import project utilities
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
@@ -147,8 +148,57 @@ def load_gdelt_articles(conn: object) -> int:
     return insert_df(conn, "posts", df)
 
 
+def _load_acled_filters() -> tuple[list[str], list[str]]:
+    """Load allowed event types and combined notes keywords from config files.
+
+    Combines keywords from three sources:
+    - conf/data_collection/acled.yml  (notes_keywords + event_types)
+    - conf/keywords/election.yml      (electoral process terms)
+    - conf/keywords/civic_space.yml   (civic space / protest terms)
+
+    This ensures the DB only retains events relevant to electoral monitoring and
+    civic space health — filtering out Battles, Explosions, and generic armed
+    conflict that make up the bulk of raw ACLED data for Colombia.
+
+    Returns
+    -------
+    tuple[list[str], list[str]]
+        (allowed_event_types, notes_keywords) — both lowercased for comparison.
+    """
+    with open(PROJECT_ROOT / "conf" / "data_collection" / "acled.yml") as f:
+        acled_cfg = yaml.safe_load(f)
+    with open(PROJECT_ROOT / "conf" / "keywords" / "election.yml") as f:
+        election_cfg = yaml.safe_load(f)
+    with open(PROJECT_ROOT / "conf" / "keywords" / "civic_space.yml") as f:
+        civic_cfg = yaml.safe_load(f)
+
+    # Allowed event types come exclusively from the ACLED config
+    allowed_event_types = [et.lower() for et in acled_cfg["filters"]["event_types"]]
+
+    # Combine notes_keywords from all three sources, deduplicated, lowercased
+    raw_keywords: list[str] = (
+        acled_cfg["settings"].get("notes_keywords", [])
+        + election_cfg.get("keywords", [])
+        + civic_cfg.get("keywords", [])
+    )
+    notes_keywords = list({kw.lower() for kw in raw_keywords})
+
+    return allowed_event_types, notes_keywords
+
+
 def load_acled_events(conn: object) -> int:
     """Load ACLED events from all JSON files in the raw directory.
+
+    Applies event_type post-filtering to keep only research-relevant events:
+    - event_type must be in the allowed list from acled.yml (excludes Battles,
+      Explosions/Remote violence, etc.)
+
+    NOTE: Spanish keyword filtering against ACLED notes is intentionally disabled.
+    ACLED event notes are written in English, so Spanish keyword filters return
+    near-zero results. The event_type filter (Protests, Riots, Violence against
+    civilians, Strategic developments) already provides the correct research scope
+    for electoral/civic space monitoring. The raw collection notebook also uses a
+    fixed 90-day window anchored to known ACLED data availability.
 
     Parameters
     ----------
@@ -158,12 +208,16 @@ def load_acled_events(conn: object) -> int:
     Returns
     -------
     int
-        Number of rows inserted.
+        Number of rows inserted (after filtering).
     """
     json_files = sorted(RAW_ACLED_DIR.glob("*.json"))
     if not json_files:
         print("  No ACLED JSON files found.")
         return 0
+
+    allowed_event_types, _ = (
+        _load_acled_filters()
+    )  # notes_keywords unused (see docstring)
 
     all_events = []
     for fp in json_files:
@@ -202,6 +256,22 @@ def load_acled_events(conn: object) -> int:
 
     df = pd.DataFrame(all_events)
     df["event_date"] = pd.to_datetime(df["event_date"], errors="coerce").dt.date
+
+    raw_count = len(df)
+
+    # Filter: Keep only allowed event types (drops Battles, Explosions, etc.)
+    # The ACLED collection notebook already queries only these types, but this
+    # provides a safety net for any stale raw files.
+    df = df[df["event_type"].str.lower().isin(allowed_event_types)]
+
+    print(
+        f"  Loaded {raw_count} raw events, "
+        f"{len(df)} match research scope (event_type filter)"
+    )
+
+    if df.empty:
+        return 0
+
     return insert_df(conn, "acled_events", df)
 
 
@@ -227,8 +297,10 @@ def main() -> None:
     gdelt_count = load_gdelt_articles(conn)
     print(f"  -> {gdelt_count} GDELT posts loaded\n")
 
-    # Load ACLED
+    # Load ACLED — clear stale unfiltered data before reload
     print("[3/3] Loading ACLED events...")
+    print("  Clearing stale ACLED data before reload...")
+    conn.execute("DELETE FROM acled_events")
     acled_count = load_acled_events(conn)
     print(f"  -> {acled_count} ACLED events loaded\n")
 

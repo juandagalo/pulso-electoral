@@ -1,4 +1,4 @@
-.PHONY: help install_env test test_verbose test_coverage check lint docs docs_test clean_env download_models collect_rss collect_gdelt_acled collect_all analyze export run_app
+.PHONY: help install_env test test_verbose test_coverage check lint docs docs_test clean_env download_models collect_rss collect_acled collect_gdelt collect_all analyze export run_app
 
 ####----Basic configurations----####
 
@@ -30,11 +30,15 @@ collect_rss: ## Run RSS collection notebook
 	@echo "Collecting RSS feeds..."
 	uv run jupyter execute notebooks/1-data/01_mgo_rss_collection_20260322.ipynb
 
-collect_gdelt_acled: ## Run GDELT + ACLED collection notebook
-	@echo "Collecting GDELT and ACLED data..."
+collect_acled: ## Run ACLED collection notebook
+	@echo "Collecting ACLED conflict data..."
+	uv run jupyter execute notebooks/1-data/02_mgo_acled_collection_20260329.ipynb
+
+collect_gdelt: ## Run GDELT collection notebook
+	@echo "Collecting GDELT event data..."
 	uv run jupyter execute notebooks/1-data/03_mgo_gdelt_acled_collection_20260323.ipynb
 
-collect_all: collect_rss collect_gdelt_acled ## Run all collection notebooks
+collect_all: collect_rss collect_acled collect_gdelt ## Run all collection notebooks
 
 ####----Analysis----####
 

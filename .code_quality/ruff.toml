@@ -90,7 +90,7 @@ docstring-code-format = true
 
 [lint.per-file-ignores]
 "tests/**" = ["S101", "PLR2004"]  # Allow assert statements and magic values in tests
-"*.ipynb" = ["F811", "PLR2004"]  # Notebooks naturally redefine variables; magic values OK in exploratory code
+"*.ipynb" = ["F811", "PLR2004", "F404"]  # Notebooks naturally redefine variables; magic values OK; F404 false-positive (each cell treated as separate module)
 "scripts/**" = ["PLR0915"]  # Allow many statements in collection scripts
 
 [lint.mccabe]
